@@ -16,6 +16,9 @@ Int main(Int argc, Char *argv[])
 	file_list_r(fnames, path);
 	N = fnames.size(); sha1s.resize(N);
 
+	// recycle folder
+	Str path_recyc = "./recycle/";
+
 	cout << "checksum...\n" << endl;
 	for (Long i = 0; i < N; ++i) {
 		sha1s[i] = sha1sum_f(fnames[i]);
@@ -24,7 +27,8 @@ Int main(Int argc, Char *argv[])
 	cout << "\ndone!" << endl;
 
 	Long ind1 = -1, ind2 = -1;
-	Str select;
+	Str select, dest, buffer;
+	buffer.resize(20*1024*1024);
 	while(true) {
 		ind1 = find_repeat(ind2, sha1s, ind1 + 1);
 		if (ind1 < 0)
@@ -38,10 +42,16 @@ Int main(Int argc, Char *argv[])
 		cout << "which one to delete? [1/2] or other value to skip: ";
 		getline(cin, select);
 		if (select == "1") {
-			file_remove(fnames[ind1]); sha1s[ind1].clear();
+			dest = path_recyc + fnames[ind1];
+			ensure_dir(dest);
+			file_move(dest, fnames[ind1], buffer);
+			sha1s[ind1].clear();
 		}
 		else if (select == "2") {
-			file_remove(fnames[ind2]); sha1s[ind1].clear();
+			dest = path_recyc + fnames[ind2];
+			ensure_dir(dest);
+			file_move(fnames[ind2], dest);
+			sha1s[ind2].clear();
 		}
 	}
 	cout << "\ndone!" << endl;

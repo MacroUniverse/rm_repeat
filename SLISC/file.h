@@ -218,7 +218,7 @@ inline void file_list_ext(vecStr_O fnames, Str_I path, Str_I ext, Bool_I keep_ex
 inline void file_copy(Str_I fname_out, Str_I fname_in, Bool_I replace = false)
 {
     if (!file_exist(fname_in))
-        SLS_ERR("file not found!");
+        SLS_ERR("file not found: " + fname_in);
     if (file_exist(fname_out) && !replace) {
         while (true) {
             if (file_exist(fname_out)) {
