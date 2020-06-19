@@ -1,20 +1,23 @@
 #include "SLISC/sha1sum.h"
 #include "SLISC/search.h"
 #include "SLISC/input.h"
+#include "SLISC/disp.h"
 
 // check repeated files and ask if delete
 using namespace slisc;
 Int main(Int argc, Char *argv[])
 {
-	Long N = argc - 1;
-	vecStr fnames; fnames.resize(N);
-	vecStr sha1s; sha1s.resize(N);
-	// ofstream fout("sha1sum.txt");
-	// if (!fout.good())
-	// 	SLS_ERR("cannot create sha1sum.txt");
+	Long N;
+	if (argc != 2)
+		SLS_ERR("usage: rm_repeat <path>");
+	Str path(argv[1]);
+	vecStr fnames, sha1s;
+	
+	file_list_r(fnames, path);
+	N = fnames.size(); sha1s.resize(N);
+
 	cout << "checksum...\n" << endl;
-	for (Int i = 0; i < N; ++i) {
-		fnames[i] = argv[i + 1];
+	for (Long i = 0; i < N; ++i) {
 		sha1s[i] = sha1sum_f(fnames[i]);
 		cout << i + 1 << "/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
 	}
