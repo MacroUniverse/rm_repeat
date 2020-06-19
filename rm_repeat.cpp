@@ -39,7 +39,7 @@ Int main(Int argc, Char *argv[])
 		cout << sha1s[ind1] << "   " << fnames[ind1] << endl;
 		cout << sha1s[ind2] << "   " << fnames[ind2] << endl;
 		cout << "------------------------------------" << endl;
-		cout << "which one to delete? [1/2] or other value to skip: ";
+		cout << "which one to delete? [1/2] or enter to skip: ";
 		getline(cin, select);
 		if (select == "1") {
 			dest = path_recyc + fnames[ind1];
@@ -50,7 +50,7 @@ Int main(Int argc, Char *argv[])
 		else if (select == "2") {
 			dest = path_recyc + fnames[ind2];
 			ensure_dir(dest);
-			file_move(fnames[ind2], dest);
+			file_move(dest, fnames[ind2], buffer);
 			sha1s[ind2].clear();
 		}
 	}
