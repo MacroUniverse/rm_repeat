@@ -463,7 +463,7 @@ inline Long find_repeat(Long_O j, vecStr_I v, Long_I start = 0)
 {
     Long N = v.size();
     for (Long i = start; i < N; ++i) {
-        for (Long j = i + 1; j < N; ++j) {
+        for (j = i + 1; j < N; ++j) {
             if (v[i] == v[j])
                 return i;
         }
@@ -487,7 +487,7 @@ inline Long find_repeat(Long_O j, vecStr32_I v, Long_I start = 0)
 {
     Long N = v.size();
     for (Long i = start; i < N; ++i) {
-        for (Long j = i + 1; j < N; ++j) {
+        for (j = i + 1; j < N; ++j) {
             if (v[i] == v[j])
                 return i;
         }
@@ -511,7 +511,7 @@ inline Long find_repeat(Long_O j, VecChar_I v, Long_I start = 0)
 {
     Long N = v.size();
     for (Long i = start; i < N; ++i) {
-        for (Long j = i + 1; j < N; ++j) {
+        for (j = i + 1; j < N; ++j) {
             if (v[i] == v[j])
                 return i;
         }
@@ -535,7 +535,7 @@ inline Long find_repeat(Long_O j, VecInt_I v, Long_I start = 0)
 {
     Long N = v.size();
     for (Long i = start; i < N; ++i) {
-        for (Long j = i + 1; j < N; ++j) {
+        for (j = i + 1; j < N; ++j) {
             if (v[i] == v[j])
                 return i;
         }
@@ -559,7 +559,7 @@ inline Long find_repeat(Long_O j, VecLlong_I v, Long_I start = 0)
 {
     Long N = v.size();
     for (Long i = start; i < N; ++i) {
-        for (Long j = i + 1; j < N; ++j) {
+        for (j = i + 1; j < N; ++j) {
             if (v[i] == v[j])
                 return i;
         }
@@ -583,7 +583,7 @@ inline Long find_repeat(Long_O j, vecLlong_I v, Long_I start = 0)
 {
     Long N = v.size();
     for (Long i = start; i < N; ++i) {
-        for (Long j = i + 1; j < N; ++j) {
+        for (j = i + 1; j < N; ++j) {
             if (v[i] == v[j])
                 return i;
         }
