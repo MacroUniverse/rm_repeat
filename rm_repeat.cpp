@@ -21,7 +21,7 @@ Int main(Int argc, Char *argv[])
 	copy(exist, true);
 
 	// recycle folder
-	Str path_recyc = "./recycle/";
+	Str path_recyc = "./rm_repeat_recycle/";
 
 	// file size
 	cout << "getting file size...\n=================================" << endl;
@@ -43,18 +43,21 @@ Int main(Int argc, Char *argv[])
 			if (sha1s[i].empty()) {
 				sha1s[i] = sha1sum_f(fnames[i]);
 				++sha1count;
-				cout << sha1count << "/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
+				cout << "(" << i+1 << ", " << j+1 << ")/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
 			}
 			if (sha1s[j].empty()) {
 				sha1s[j] = sha1sum_f(fnames[j]);
 				++sha1count;
-				cout << sha1count << "/" << N << "  " << sha1s[j] << "   " << fnames[j] << endl;
+				cout << "(" << i+1 << ", " << j+1 << ")/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
 			}
 		}
 	}
+	cout << "\nchecked: " << sha1count << "/" << N << endl;
 	
 	// check repeated sha1 and choose (skip if sha1 is empty)
-	cout << "\nplease choose...\n===============================================" << endl;
+	Long Ndelete = 0;
+	cout << "\nplease choose the files to move to \"./rm_repeat_recycle/\"..." << endl;
+	cout << "===============================================" << endl;
 	Str select, dest, buffer;
 	for (Long i = 0; i < N; ++i) {
 		if (sha1s[i].empty() || !exist[i])
@@ -71,17 +74,18 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				file_move(dest, fnames[i]);
-				exist[i] = false;
+				exist[i] = false; ++Ndelete;
 			}
 			if (select == "2" || select == "12") {
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				file_move(dest, fnames[j]);
-				exist[j] = false;
+				exist[j] = false; ++Ndelete;
 			}
 			if (select == "1" || select == "12")
 				break;
 		}
 	}
-	cout << "\ndone!" << endl;
+	cout << "\nmoved: " << Ndelete << endl;
+	cout << "done!" << endl;
 }
