@@ -108,7 +108,6 @@ Int main(Int argc, Char *argv[])
 			}
 			else if (select == "id2") {
 				ignor_dirs.push_back(path2dir(fnames[j]));
-				break;
 			}
 		}
 	}
