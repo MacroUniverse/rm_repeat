@@ -69,7 +69,7 @@ Int main(Int argc, Char *argv[])
 				continue;
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
-			cout << "[1/2/b(both)/i(ignore this sha1sum)/id1/id2(ignore dir)] or enter to skip: "; cout.flush();
+			cout << "[1/2/b(both)/i(ignore this sha1sum)/id=...(ignore dir)] or enter to skip: "; cout.flush();
 			getline(cin, select);
 			cout << "-----------------------------------------------" << endl;
 			if (select == "1") {
@@ -102,12 +102,10 @@ Int main(Int argc, Char *argv[])
 				ignor_sha1s.push_back(sha1s[i]);
 				break;
 			}
-			else if (select == "id1") {
-				ignor_dirs.push_back(path2dir(fnames[i]));
-				break;
-			}
-			else if (select == "id2") {
-				ignor_dirs.push_back(path2dir(fnames[j]));
+			else if (select.substr(0,3) == "id=") {
+				if (select.back() != '/')
+					select += '/';
+				ignor_dirs.push_back(select.substr(3));
 			}
 		}
 	}
