@@ -48,7 +48,7 @@ Int main(Int argc, Char *argv[])
 			if (sha1s[j].empty()) {
 				sha1s[j] = sha1sum_f(fnames[j]);
 				++sha1count;
-				cout << sha1count << "/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
+				cout << sha1count << "/" << N << "  " << sha1s[j] << "   " << fnames[j] << endl;
 			}
 		}
 	}
