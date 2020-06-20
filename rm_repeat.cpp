@@ -24,7 +24,7 @@ Int main(Int argc, Char *argv[])
 	Str path_recyc = "./recycle/";
 
 	// file size
-	cout << "getting file size..." << endl;
+	cout << "getting file size...\n=================================" << endl;
 	for (Long i = 0; i < N; ++i) {
 		sizes[i] = file_size(fnames[i]);
 		cout << i + 1 << "/" << N << "  "
@@ -33,7 +33,7 @@ Int main(Int argc, Char *argv[])
 
 	// checksum only for non-empty files with the the same sizes
 	Long sha1count = 0;
-	cout << "checksum...\n" << endl;
+	cout << "\n\nchecksum...\n==============================================================" << endl;
 	for (Long i = 0; i < N; ++i) {
 		if (sizes[i] == 0)
 			continue;
@@ -52,32 +52,31 @@ Int main(Int argc, Char *argv[])
 			}
 		}
 	}
-	cout << "\ndone!" << endl;
-
+	
 	// check repeated sha1 and choose (skip if sha1 is empty)
+	cout << "\nplease choose...\n===============================================" << endl;
 	Str select, dest, buffer;
-	buffer.resize(20*1024*1024);
 	for (Long i = 0; i < N; ++i) {
 		if (sha1s[i].empty() || !exist[i])
 			continue;
 		for (Long j = i+1; j < N; ++j) {
 			if (sha1s[j] != sha1s[i])
 				continue;
-			cout << "\n" << i+1 << "/" << N << " --------------------------------" << endl;
+			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
-			cout << "------------------------------------" << endl;
 			cout << "which one to delete? [1/2/12] or enter to skip: "; cout.flush();
 			getline(cin, select);
+			cout << "-----------------------------------------------" << endl;
 			if (select == "1" || select == "12") {
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
-				file_move(dest, fnames[i], buffer);
+				file_move(dest, fnames[i]);
 				exist[i] = false;
 			}
 			if (select == "2" || select == "12") {
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
-				file_move(dest, fnames[j], buffer);
+				file_move(dest, fnames[j]);
 				exist[j] = false;
 			}
 			if (select == "1" || select == "12")
