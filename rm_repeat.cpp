@@ -59,31 +59,57 @@ Int main(Int argc, Char *argv[])
 	cout << "\nplease choose the files to move to \"./rm_repeat_recycle/\"..." << endl;
 	cout << "===============================================" << endl;
 	Str select, dest, buffer;
+	vecStr ignor_sha1s, ignor_dirs;
 	for (Long i = 0; i < N; ++i) {
-		if (sha1s[i].empty() || !exist[i])
+		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0
+				|| search(path2dir(fnames[i]), ignor_dirs) >= 0)
 			continue;
 		for (Long j = i+1; j < N; ++j) {
-			if (sha1s[j] != sha1s[i])
+			if (sha1s[j] != sha1s[i] || search(path2dir(fnames[i]), ignor_dirs) >= 0)
 				continue;
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
-			cout << "which one to delete? [1/2/12] or enter to skip: "; cout.flush();
+			cout << "[1/2/b(both)/i(ignore this sha1sum)/id1/id2(ignore dir)] or enter to skip: "; cout.flush();
 			getline(cin, select);
 			cout << "-----------------------------------------------" << endl;
-			if (select == "1" || select == "12") {
+			if (select == "1") {
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				file_move(dest, fnames[i]);
 				exist[i] = false; ++Ndelete;
+				break;
 			}
-			if (select == "2" || select == "12") {
+			else if (select == "2") {
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 			}
-			if (select == "1" || select == "12")
+			else if (select == "b") {
+				// 1
+				dest = path_recyc + fnames[i];
+				ensure_dir(dest);
+				file_move(dest, fnames[i]);
+				exist[i] = false; ++Ndelete;
+				// 2
+				dest = path_recyc + fnames[j];
+				ensure_dir(dest);
+				file_move(dest, fnames[j]);
+				exist[j] = false; ++Ndelete;
 				break;
+			}
+			else if (select == "i") {
+				ignor_sha1s.push_back(sha1s[i]);
+				break;
+			}
+			else if (select == "id1") {
+				ignor_dirs.push_back(path2dir(fnames[i]));
+				break;
+			}
+			else if (select == "id2") {
+				ignor_dirs.push_back(path2dir(fnames[j]));
+				break;
+			}
 		}
 	}
 	cout << "\nmoved: " << Ndelete << endl;
