@@ -11,47 +11,77 @@ Int main(Int argc, Char *argv[])
 	if (argc != 2)
 		SLS_ERR("usage: rm_repeat <path>");
 	Str path(argv[1]);
-	vecStr fnames, sha1s;
+	vecStr fnames, sha1s; // file names and sha1 sums
+	VecLong sizes; // file size in bytes
+	VecBool exist; // does file exist? (might be deleted)
 	
 	file_list_r(fnames, path);
-	N = fnames.size(); sha1s.resize(N);
+	N = fnames.size();
+	sizes.resize(N); sha1s.resize(N); exist.resize(N);
+	copy(exist, true);
 
 	// recycle folder
 	Str path_recyc = "./recycle/";
 
+	// file size
+	cout << "getting file size..." << endl;
+	for (Long i = 0; i < N; ++i) {
+		sizes[i] = file_size(fnames[i]);
+		cout << i + 1 << "/" << N << "  "
+			<< (Float)sizes[i] << " bytes   " << fnames[i] << endl;
+	}
+
+	// checksum only for non-empty files with the the same sizes
+	Long sha1count = 0;
 	cout << "checksum...\n" << endl;
 	for (Long i = 0; i < N; ++i) {
-		sha1s[i] = sha1sum_f(fnames[i]);
-		cout << i + 1 << "/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
+		if (sizes[i] == 0)
+			continue;
+		for (Long j = i+1; j < N; ++j) {
+			if (sizes[j] != sizes[i])
+				continue;
+			if (sha1s[i].empty()) {
+				sha1s[i] = sha1sum_f(fnames[i]);
+				++sha1count;
+				cout << sha1count << "/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
+			}
+			if (sha1s[j].empty()) {
+				sha1s[j] = sha1sum_f(fnames[j]);
+				++sha1count;
+				cout << sha1count << "/" << N << "  " << sha1s[i] << "   " << fnames[i] << endl;
+			}
+		}
 	}
 	cout << "\ndone!" << endl;
 
-	Long ind1 = -1, ind2 = -1;
+	// check repeated sha1 and choose (skip if sha1 is empty)
 	Str select, dest, buffer;
 	buffer.resize(20*1024*1024);
-	while(true) {
-		ind1 = find_repeat(ind2, sha1s, ind1 + 1);
-		if (ind1 < 0)
-			break;
-		if (sha1s[ind1].empty())
+	for (Long i = 0; i < N; ++i) {
+		if (sha1s[i].empty() || !exist[i])
 			continue;
-		cout << "\n------------------------------------" << endl;
-		cout << sha1s[ind1] << "   " << fnames[ind1] << endl;
-		cout << sha1s[ind2] << "   " << fnames[ind2] << endl;
-		cout << "------------------------------------" << endl;
-		cout << "which one to delete? [1/2] or enter to skip: ";
-		getline(cin, select);
-		if (select == "1") {
-			dest = path_recyc + fnames[ind1];
-			ensure_dir(dest);
-			file_move(dest, fnames[ind1], buffer);
-			sha1s[ind1].clear();
-		}
-		else if (select == "2") {
-			dest = path_recyc + fnames[ind2];
-			ensure_dir(dest);
-			file_move(dest, fnames[ind2], buffer);
-			sha1s[ind2].clear();
+		for (Long j = i+1; j < N; ++j) {
+			if (sha1s[j] != sha1s[i])
+				continue;
+			cout << "\n" << i+1 << "/" << N << " --------------------------------" << endl;
+			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
+			cout << "------------------------------------" << endl;
+			cout << "which one to delete? [1/2/12] or enter to skip: "; cout.flush();
+			getline(cin, select);
+			if (select == "1" || select == "12") {
+				dest = path_recyc + fnames[i];
+				ensure_dir(dest);
+				file_move(dest, fnames[i], buffer);
+				exist[i] = false;
+			}
+			if (select == "2" || select == "12") {
+				dest = path_recyc + fnames[j];
+				ensure_dir(dest);
+				file_move(dest, fnames[j], buffer);
+				exist[j] = false;
+			}
+			if (select == "1" || select == "12")
+				break;
 		}
 	}
 	cout << "\ndone!" << endl;
