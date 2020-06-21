@@ -62,10 +62,10 @@ Int main(Int argc, Char *argv[])
 	vecStr ignor_sha1s, ignor_dirs;
 	for (Long i = 0; i < N; ++i) {
 		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0
-				|| search(path2dir(fnames[i]), ignor_dirs) >= 0)
+				|| search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
 			continue;
 		for (Long j = i+1; j < N; ++j) {
-			if (sha1s[j] != sha1s[i] || search(path2dir(fnames[i]), ignor_dirs) >= 0)
+			if (sha1s[j] != sha1s[i] || search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
 				continue;
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
@@ -96,6 +96,9 @@ Int main(Int argc, Char *argv[])
 				ensure_dir(dest);
 				file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
+				break;
+			}
+			else if (select == "s") {
 				break;
 			}
 			else if (select == "i") {
