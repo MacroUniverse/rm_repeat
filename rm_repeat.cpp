@@ -60,7 +60,7 @@ Int main(Int argc, Char *argv[])
 	cout << "\nplease choose the files to move to \"./rm_repeat_recycle/\"..." << endl;
 	cout << "===============================================" << endl;
 	Str select, dest, buffer;
-	vecStr ignor_sha1s, ignor_dirs;
+	vecStr ignor_sha1s, ignor_dirs, auto_del_dirs;
 	for (Long i = 0; i < N; ++i) {
 		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0
 				|| search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
@@ -68,9 +68,30 @@ Int main(Int argc, Char *argv[])
 		for (Long j = i+1; j < N; ++j) {
 			if (sha1s[j] != sha1s[i] || search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
 				continue;
+			
+			// auto delete (only if one of them is in auto_del_dirs[])
+			Bool del1 = search_head(auto_del_dirs, path2dir(fnames[i])) >= 0;
+			Bool del2 = search_head(auto_del_dirs, path2dir(fnames[j])) >= 0;
+			if (del1 && !del2) {
+				cout << "auto delete: " << fnames[i] << endl;
+				dest = path_recyc + fnames[i];
+				ensure_dir(dest);
+				file_move(dest, fnames[i]);
+				exist[i] = false; ++Ndelete;
+				break;
+			}
+			else if (!del1 && del2) {
+				dest = path_recyc + fnames[j];
+				ensure_dir(dest);
+				file_move(dest, fnames[j]);
+				exist[j] = false; ++Ndelete;
+				continue;
+			}
+
+			// user action
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
-			cout << "[1/2/b(both)/i(ignore this sha1sum)/id=...(ignore dir)] or enter to skip: "; cout.flush();
+			cout << "[1/2/b(both)/i(ignore this sha1sum)/id=...(ignore dir)/ad=...(auto delete)] or enter to skip: "; cout.flush();
 			getline(cin, select);
 			cout << "-----------------------------------------------" << endl;
 			if (select == "1") {
@@ -110,6 +131,11 @@ Int main(Int argc, Char *argv[])
 				if (select.back() != '/')
 					select += '/';
 				ignor_dirs.push_back(select.substr(3));
+			}
+			else if (select.substr(0,3) == "ad=") {
+				if (select.back() != '/')
+					select += '/';
+				auto_del_dirs.push_back(select.substr(3));
 			}
 		}
 	}
