@@ -92,7 +92,7 @@ Int main(Int argc, Char *argv[])
 			// user action
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
-			cout << "[1/2/b(both)/i(ignore this sha1sum)/id=...(ignore dir)/ad=...(auto delete)] or enter to skip: "; cout.flush();
+			cout << "[1/2/b(both)/i(ignore this sha1sum)/s(skip 1st)/<enter> (skip 2nd)/id=...(ignore dir)/ad=...(auto delete dir)]: "; cout.flush();
 			getline(cin, select);
 			cout << "-----------------------------------------------" << endl;
 			if (select == "1") {
@@ -132,11 +132,13 @@ Int main(Int argc, Char *argv[])
 				if (select.back() != '/')
 					select += '/';
 				ignor_dirs.push_back(select.substr(3));
+				--j;
 			}
 			else if (select.substr(0,3) == "ad=") {
 				if (select.back() != '/')
 					select += '/';
 				auto_del_dirs.push_back(select.substr(3));
+				--j;
 			}
 		}
 	}
