@@ -8,7 +8,7 @@ using namespace slisc;
 Int main(Int argc, Char *argv[])
 {
 	Long N;
-	if (argc <= 2)
+	if (argc < 2)
 		SLS_ERR("usage: rm_repeat <path1> <path2> ...");
 	vecStr fnames, sha1s; // file names and sha1 sums
 	VecLong sizes; // file size in bytes
