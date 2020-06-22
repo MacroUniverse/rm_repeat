@@ -81,6 +81,7 @@ Int main(Int argc, Char *argv[])
 				break;
 			}
 			else if (!del1 && del2) {
+				cout << "auto delete: " << fnames[j] << endl;
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				file_move(dest, fnames[j]);
