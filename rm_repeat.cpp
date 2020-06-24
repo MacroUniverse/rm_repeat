@@ -57,8 +57,8 @@ Int main(Int argc, Char *argv[])
 				sha1s[j] = sha1sum_f(fnames[j]);
 				++sha1count;
 				cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-					 << std::setw(43) << sha1s[i]
-					 << std::setw(3) << fnames[i] << endl;
+					 << std::setw(43) << sha1s[j]
+					 << std::setw(3) << fnames[j] << endl;
 			}
 		}
 	}
