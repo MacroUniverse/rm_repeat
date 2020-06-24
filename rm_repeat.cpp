@@ -33,7 +33,7 @@ Int main(Int argc, Char *argv[])
 		}
 		sizes[i] = file_size(fnames[i]);
 		cout << std::setw(2*log10(N)+4) << std::left << num2str(i + 1) + "/" + num2str(N)
-			 << std::setw(12) << std::right << num2str(sizes[i]) + "  "
+			 << std::setw(13) << std::right << num2str(sizes[i]) + "  "
 			 << std::setw(3) << std::left << fnames[i] << endl;
 	}
 
