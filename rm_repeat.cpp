@@ -25,19 +25,23 @@ Int main(Int argc, Char *argv[])
 	Str path_recyc = "./rm_repeat_recycle/";
 
 	// file size
+	Bool badfile = false;
 	cout << "getting file size...\n=================================" << endl;
 	for (Long i = 0; i < N; ++i) {
+		if (!file_exist(fnames[i])) {
+			badfile = true; sizes[i] = -1; continue;
+		}
 		sizes[i] = file_size(fnames[i]);
-		cout << std::setw(N/5+5) << std::left << num2str(i + 1) + "/" + num2str(N)
-			 << std::setw(14) << sizes[i]
-			 << std::setw(3) << fnames[i] << endl;
+		cout << std::setw(2*log10(N)+4) << std::left << num2str(i + 1) + "/" + num2str(N)
+			 << std::setw(12) << std::right << num2str(sizes[i]) + "  "
+			 << std::setw(3) << std::left << fnames[i] << endl;
 	}
 
 	// checksum only for non-empty files with the the same sizes
 	Long sha1count = 0;
 	cout << "\n\nchecksum...\n==============================================================" << endl;
 	for (Long i = 0; i < N; ++i) {
-		if (sizes[i] == 0)
+		if (sizes[i] <= 0)
 			continue;
 		for (Long j = i+1; j < N; ++j) {
 			if (sizes[j] != sizes[i])
@@ -45,21 +49,30 @@ Int main(Int argc, Char *argv[])
 			if (sha1s[i].empty()) {
 				sha1s[i] = sha1sum_f(fnames[i]);
 				++sha1count;
-				cout << std::setw(N/10*3+10) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-					 << std::setw(44) << sha1s[i]
+				cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+					 << std::setw(43) << sha1s[i]
 					 << std::setw(3) << fnames[i] << endl;
 			}
 			if (sha1s[j].empty()) {
 				sha1s[j] = sha1sum_f(fnames[j]);
 				++sha1count;
-				cout << std::setw(N/10*3+10) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-					 << std::setw(44) << sha1s[j]
-					 << std::setw(3) << fnames[j] << endl;
+				cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+					 << std::setw(43) << sha1s[i]
+					 << std::setw(3) << fnames[i] << endl;
 			}
 		}
 	}
 	cout << "\nchecked: " << sha1count << "/" << N << endl;
 	
+	if (badfile) {
+		cout << "\nthe following files cannot be opened (ignored)" << endl;
+		cout << "===============================================" << endl;
+		for (Long i = 0; i < N; ++i) {
+			if (sizes[i] <= 0)
+				cout << "ignored (cannot open): " << fnames[i] << endl;
+		}
+	}
+
 	// check repeated sha1 and choose (skip if sha1 is empty)
 	Long Ndelete = 0;
 	cout << "\nplease choose the files to move to \"./rm_repeat_recycle/\"..." << endl;
