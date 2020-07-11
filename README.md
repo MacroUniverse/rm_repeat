@@ -13,4 +13,4 @@ remove repeated files
 * `s` to skip the first file
 * `i` will ignore all files with the current sha1 hash
 * `id=<dir>` will ignore `<dir>` directory (including it's subdirectories), just copy and past part of the directory from the console output. No space allowed after `id=`, trailing `/` is optional.
-* `ad=<dir>` will auto delete files in this directory is there is an identical one outsize this directory (this is useful for cleaning two folders with different versions)
+* `ad=<dir>` will auto delete repeated files in this directory, and its subdirectories.

@@ -98,7 +98,7 @@ Int main(Int argc, Char *argv[])
 				exist[i] = false; ++Ndelete;
 				break;
 			}
-			else if (!del1 && del2) {
+			else if (del2) {
 				cout << "auto delete: " << fnames[j] << endl;
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
