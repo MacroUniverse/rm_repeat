@@ -150,12 +150,20 @@ Int main(Int argc, Char *argv[])
 				if (select.back() != '/')
 					select += '/';
 				ignor_dirs.push_back(select.substr(3));
+				cout << "ignored directories:" << endl;
+				disp(ignor_dirs);
 				--j;
 			}
 			else if (select.substr(0,3) == "ad=") {
 				if (select.back() != '/')
 					select += '/';
 				auto_del_dirs.push_back(select.substr(3));
+				cout << "auto delete directories:" << endl;
+				disp(auto_del_dirs);
+				--j;
+			}
+			else {
+				cout << "unknown option, please select again." << endl;
 				--j;
 			}
 		}
