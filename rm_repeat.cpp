@@ -162,6 +162,8 @@ Int main(Int argc, Char *argv[])
 				disp(auto_del_dirs);
 				--j;
 			}
+			else if (select.empty())
+				continue;
 			else {
 				cout << "unknown option, please select again." << endl;
 				--j;
