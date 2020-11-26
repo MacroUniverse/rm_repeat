@@ -1,6 +1,6 @@
 ## rm_repeat
 remove repeated files
-* usage: `rm_repeat <dir>`
+* usage: `rm_repeat <dir1> <dir2> ...`
 * the 1st loop checks file size for every file
 * the 2nd loop checks sha1 hash for all files with non-unique sizes.
 * the thrid lood will check identical sha1 hash, and ask interactively what to do
