@@ -4,7 +4,7 @@
 #include "slice_arith.h"
 
 namespace slisc {
-
+// return signed size instead of unsigned
 inline Long size(vecBool_I v)
 {
     return v.size();
@@ -51,13 +51,25 @@ inline Long size(vecStr32_I v)
 }
 
 
+// sum of absolute values
+inline Llong sum_abs_v(const Char *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
+        s += abs(v[i]);
+    return s;
+}
+
 inline Llong sum_abs_v(const Int *v, Long_I N)
 {
 #ifdef SLS_CHECK_BOUNDS
     if (N <= 0) SLS_ERR("illegal length!");
 #endif
-    Llong s = v[0];
-    for (Llong i = 1; i < N; ++i)
+    Llong s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
         s += abs(v[i]);
     return s;
 }
@@ -67,8 +79,19 @@ inline Llong sum_abs_v(const Llong *v, Long_I N)
 #ifdef SLS_CHECK_BOUNDS
     if (N <= 0) SLS_ERR("illegal length!");
 #endif
-    Llong s = v[0];
-    for (Llong i = 1; i < N; ++i)
+    Llong s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
+        s += abs(v[i]);
+    return s;
+}
+
+inline Float sum_abs_v(const Float *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
         s += abs(v[i]);
     return s;
 }
@@ -79,6 +102,28 @@ inline Doub sum_abs_v(const Doub *v, Long_I N)
     if (N <= 0) SLS_ERR("illegal length!");
 #endif
     Doub s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
+        s += abs(v[i]);
+    return s;
+}
+
+inline Ldoub sum_abs_v(const Ldoub *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
+        s += abs(v[i]);
+    return s;
+}
+
+inline Float sum_abs_v(const Fcomp *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = abs(v[0]);
     for (Long i = 1; i < N; ++i)
         s += abs(v[i]);
     return s;
@@ -95,8 +140,25 @@ inline Doub sum_abs_v(const Comp *v, Long_I N)
     return s;
 }
 
+inline Ldoub sum_abs_v(const Lcomp *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = abs(v[0]);
+    for (Long i = 1; i < N; ++i)
+        s += abs(v[i]);
+    return s;
+}
 
-inline Int sum_abs(VecInt_I v)
+
+// sum of absolute values
+inline Llong sum_abs(VecChar_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(VecInt_I v)
 {
     return sum_abs_v(v.ptr(), v.size());
 }
@@ -106,7 +168,22 @@ inline Llong sum_abs(VecLlong_I v)
     return sum_abs_v(v.ptr(), v.size());
 }
 
+inline Float sum_abs(VecFloat_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
 inline Doub sum_abs(VecDoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(VecLdoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(VecFcomp_I v)
 {
     return sum_abs_v(v.ptr(), v.size());
 }
@@ -116,7 +193,207 @@ inline Doub sum_abs(VecComp_I v)
     return sum_abs_v(v.ptr(), v.size());
 }
 
-inline Int sum_abs(SvecInt_I v)
+inline Ldoub sum_abs(VecLcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(MatChar_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(MatInt_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(MatLlong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(MatFloat_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(MatDoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(MatLdoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(MatFcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(MatComp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(MatLcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Mat3Char_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Mat3Int_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Mat3Llong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(Mat3Float_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(Mat3Doub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(Mat3Ldoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(Mat3Fcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(Mat3Comp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(Mat3Lcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(CmatChar_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(CmatInt_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(CmatLlong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(CmatFloat_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(CmatDoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(CmatLdoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(CmatFcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(CmatComp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(CmatLcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Cmat3Char_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Cmat3Int_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Cmat3Llong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(Cmat3Float_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(Cmat3Doub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(Cmat3Ldoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(Cmat3Fcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(Cmat3Comp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(Cmat3Lcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(SvecChar_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(SvecInt_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(SvecLlong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(SvecFloat_I v)
 {
     return sum_abs_v(v.ptr(), v.size());
 }
@@ -126,11 +403,226 @@ inline Doub sum_abs(SvecDoub_I v)
     return sum_abs_v(v.ptr(), v.size());
 }
 
+inline Ldoub sum_abs(SvecLdoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(SvecFcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
 inline Doub sum_abs(SvecComp_I v)
 {
     return sum_abs_v(v.ptr(), v.size());
 }
 
+inline Ldoub sum_abs(SvecLcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(ScmatChar_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(ScmatInt_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(ScmatLlong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(ScmatFloat_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(ScmatDoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(ScmatLdoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(ScmatFcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(ScmatComp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(ScmatLcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Scmat3Char_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Scmat3Int_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Llong sum_abs(Scmat3Llong_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(Scmat3Float_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(Scmat3Doub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(Scmat3Ldoub_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Float sum_abs(Scmat3Fcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Doub sum_abs(Scmat3Comp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+inline Ldoub sum_abs(Scmat3Lcomp_I v)
+{
+    return sum_abs_v(v.ptr(), v.size());
+}
+
+
+// maximum/minimum element (pointer version)
+// max_v(), min_v()
+inline Char max_v(const Char *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Char max_v(const Char *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Char max_v(Long_O ind, const Char *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Char max_v(Long_O ind, const Char *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Char min_v(const Char *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Char min_v(const Char *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Char min_v(Long_O ind, const Char *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Char min_v(Long_O ind, const Char *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Char s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
 
 inline Int max_v(const Int *v, Long_I N)
 {
@@ -154,6 +646,88 @@ inline Int max_v(const Int *v, Long_I N, Long_I step)
     for (Long i = step; i < N*step; i += step) {
         if (s < v[i])
             s = v[i];
+    }
+    return s;
+}
+
+inline Int max_v(Long_O ind, const Int *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Int s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Int max_v(Long_O ind, const Int *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Int s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Int min_v(const Int *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Int s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Int min_v(const Int *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Int s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Int min_v(Long_O ind, const Int *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Int s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Int min_v(Long_O ind, const Int *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Int s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
     }
     return s;
 }
@@ -184,6 +758,196 @@ inline Llong max_v(const Llong *v, Long_I N, Long_I step)
     return s;
 }
 
+inline Llong max_v(Long_O ind, const Llong *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Llong max_v(Long_O ind, const Llong *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Llong min_v(const Llong *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Llong min_v(const Llong *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Llong min_v(Long_O ind, const Llong *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Llong min_v(Long_O ind, const Llong *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Llong s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Float max_v(const Float *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Float max_v(const Float *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Float max_v(Long_O ind, const Float *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Float max_v(Long_O ind, const Float *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Float min_v(const Float *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Float min_v(const Float *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Float min_v(Long_O ind, const Float *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Float min_v(Long_O ind, const Float *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Float s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
 inline Doub max_v(const Doub *v, Long_I N)
 {
 #ifdef SLS_CHECK_BOUNDS
@@ -210,75 +974,772 @@ inline Doub max_v(const Doub *v, Long_I N, Long_I step)
     return s;
 }
 
-
-inline Int max(VecInt_I v)
+inline Doub max_v(Long_O ind, const Doub *v, Long_I N)
 {
-    return max_v(v.ptr(), v.size());
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Doub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
 }
 
-inline Llong max(VecLlong_I v)
+inline Doub max_v(Long_O ind, const Doub *v, Long_I N, Long_I step)
 {
-    return max_v(v.ptr(), v.size());
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Doub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
 }
 
-inline Doub max(VecDoub_I v)
+inline Doub min_v(const Doub *v, Long_I N)
 {
-    return max_v(v.ptr(), v.size());
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Doub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
 }
 
-inline Llong max(SvecLlong_I v)
+inline Doub min_v(const Doub *v, Long_I N, Long_I step)
 {
-    return max_v(v.ptr(), v.size());
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Doub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
 }
 
+inline Doub min_v(Long_O ind, const Doub *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Doub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Doub min_v(Long_O ind, const Doub *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Doub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Ldoub max_v(const Ldoub *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Ldoub max_v(const Ldoub *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Ldoub max_v(Long_O ind, const Ldoub *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Ldoub max_v(Long_O ind, const Ldoub *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s < v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Ldoub min_v(const Ldoub *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Ldoub min_v(const Ldoub *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i])
+            s = v[i];
+    }
+    return s;
+}
+
+inline Ldoub min_v(Long_O ind, const Ldoub *v, Long_I N)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = 1; i < N; ++i) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+inline Ldoub min_v(Long_O ind, const Ldoub *v, Long_I N, Long_I step)
+{
+#ifdef SLS_CHECK_BOUNDS
+    if (N <= 0) SLS_ERR("illegal length!");
+#endif
+    Ldoub s = v[0];
+    for (Long i = step; i < N*step; i += step) {
+        if (s > v[i]) {
+            s = v[i];  ind = i;
+        }
+    }
+    return s;
+}
+
+
+inline Char max(VecChar_I v)
+{ return max_v(v.ptr(), v.size()); }
 
 inline Char max(Long_O ind, VecChar_I v)
-{
-    Long N = v.size();
-    Char val = v[0];
-    for (Long i = 1; i < N; ++i) {
-        if (val < v[i]) {
-            val = v[i]; ind = i;
-        }
-    }
-    return val;
-}
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(VecChar_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, VecChar_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(VecInt_I v)
+{ return max_v(v.ptr(), v.size()); }
 
 inline Int max(Long_O ind, VecInt_I v)
-{
-    Long N = v.size();
-    Int val = v[0];
-    for (Long i = 1; i < N; ++i) {
-        if (val < v[i]) {
-            val = v[i]; ind = i;
-        }
-    }
-    return val;
-}
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(VecInt_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, VecInt_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(VecLlong_I v)
+{ return max_v(v.ptr(), v.size()); }
 
 inline Llong max(Long_O ind, VecLlong_I v)
-{
-    Long N = v.size();
-    Llong val = v[0];
-    for (Long i = 1; i < N; ++i) {
-        if (val < v[i]) {
-            val = v[i]; ind = i;
-        }
-    }
-    return val;
-}
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(VecLlong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, VecLlong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(VecFloat_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, VecFloat_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(VecFloat_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, VecFloat_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(VecDoub_I v)
+{ return max_v(v.ptr(), v.size()); }
 
 inline Doub max(Long_O ind, VecDoub_I v)
-{
-    Long N = v.size();
-    Doub val = v[0];
-    for (Long i = 1; i < N; ++i) {
-        if (val < v[i]) {
-            val = v[i]; ind = i;
-        }
-    }
-    return val;
-}
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(VecDoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, VecDoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(VecLdoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, VecLdoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(VecLdoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, VecLdoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(MatChar_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, MatChar_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(MatChar_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, MatChar_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(MatInt_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, MatInt_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(MatInt_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, MatInt_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(MatLlong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, MatLlong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(MatLlong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, MatLlong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(MatFloat_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, MatFloat_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(MatFloat_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, MatFloat_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(MatDoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, MatDoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(MatDoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, MatDoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(MatLdoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, MatLdoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(MatLdoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, MatLdoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(Mat3Char_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, Mat3Char_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(Mat3Char_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, Mat3Char_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(Mat3Int_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, Mat3Int_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(Mat3Int_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, Mat3Int_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(Mat3Llong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, Mat3Llong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(Mat3Llong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, Mat3Llong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(Mat3Float_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, Mat3Float_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(Mat3Float_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, Mat3Float_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(Mat3Doub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, Mat3Doub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(Mat3Doub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, Mat3Doub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(Mat3Ldoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, Mat3Ldoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(Mat3Ldoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, Mat3Ldoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(CmatChar_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, CmatChar_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(CmatChar_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, CmatChar_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(CmatInt_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, CmatInt_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(CmatInt_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, CmatInt_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(CmatLlong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, CmatLlong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(CmatLlong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, CmatLlong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(CmatFloat_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, CmatFloat_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(CmatFloat_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, CmatFloat_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(CmatDoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, CmatDoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(CmatDoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, CmatDoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(CmatLdoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, CmatLdoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(CmatLdoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, CmatLdoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(Cmat3Char_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, Cmat3Char_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(Cmat3Char_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, Cmat3Char_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(Cmat3Int_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, Cmat3Int_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(Cmat3Int_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, Cmat3Int_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(Cmat3Llong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, Cmat3Llong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(Cmat3Llong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, Cmat3Llong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(Cmat3Float_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, Cmat3Float_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(Cmat3Float_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, Cmat3Float_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(Cmat3Doub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, Cmat3Doub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(Cmat3Doub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, Cmat3Doub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(Cmat3Ldoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, Cmat3Ldoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(Cmat3Ldoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, Cmat3Ldoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(SvecChar_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, SvecChar_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(SvecChar_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, SvecChar_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(SvecInt_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, SvecInt_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(SvecInt_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, SvecInt_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(SvecLlong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, SvecLlong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(SvecLlong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, SvecLlong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(SvecFloat_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, SvecFloat_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(SvecFloat_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, SvecFloat_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(SvecDoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, SvecDoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(SvecDoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, SvecDoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(SvecLdoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, SvecLdoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(SvecLdoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, SvecLdoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(ScmatChar_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, ScmatChar_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(ScmatChar_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, ScmatChar_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(ScmatInt_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, ScmatInt_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(ScmatInt_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, ScmatInt_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(ScmatLlong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, ScmatLlong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(ScmatLlong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, ScmatLlong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(ScmatFloat_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, ScmatFloat_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(ScmatFloat_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, ScmatFloat_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(ScmatDoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, ScmatDoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(ScmatDoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, ScmatDoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(ScmatLdoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, ScmatLdoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(ScmatLdoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, ScmatLdoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Char max(Scmat3Char_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Char max(Long_O ind, Scmat3Char_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Char min(Scmat3Char_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Char min(Long_O ind, Scmat3Char_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Int max(Scmat3Int_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Int max(Long_O ind, Scmat3Int_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Int min(Scmat3Int_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Int min(Long_O ind, Scmat3Int_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Llong max(Scmat3Llong_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Llong max(Long_O ind, Scmat3Llong_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Llong min(Scmat3Llong_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Llong min(Long_O ind, Scmat3Llong_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Float max(Scmat3Float_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Float max(Long_O ind, Scmat3Float_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Float min(Scmat3Float_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Float min(Long_O ind, Scmat3Float_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Doub max(Scmat3Doub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Doub max(Long_O ind, Scmat3Doub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Doub min(Scmat3Doub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Doub min(Long_O ind, Scmat3Doub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub max(Scmat3Ldoub_I v)
+{ return max_v(v.ptr(), v.size()); }
+
+inline Ldoub max(Long_O ind, Scmat3Ldoub_I v)
+{ return max_v(ind, v.ptr(), v.size()); }
+
+inline Ldoub min(Scmat3Ldoub_I v)
+{ return min_v(v.ptr(), v.size()); }
+
+inline Ldoub min(Long_O ind, Scmat3Ldoub_I v)
+{ return min_v(ind, v.ptr(), v.size()); }
 
 
 inline Int max_abs_v(const Int *v, Long_I N)
@@ -539,7 +2000,7 @@ inline void mod_vs(Doub *v, Doub_I s, Long_I N)
 
 inline void mod(VecInt_O v, VecInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -553,7 +2014,7 @@ inline void mod(VecInt_O v, Int_I s)
 
 inline void mod(VecLlong_O v, VecLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -644,7 +2105,7 @@ inline void imag(VecComp_IO v)
 
 inline void real(VecDoub_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -653,7 +2114,7 @@ inline void real(VecDoub_O v, VecComp_I v1)
 
 inline void imag(VecDoub_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -662,7 +2123,7 @@ inline void imag(VecDoub_O v, VecComp_I v1)
 
 inline void real(VecComp_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -671,7 +2132,7 @@ inline void real(VecComp_O v, VecComp_I v1)
 
 inline void imag(VecComp_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -754,7 +2215,7 @@ inline void abs(VecComp_IO v)
 
 inline void abs(VecDoub_O v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -763,7 +2224,7 @@ inline void abs(VecDoub_O v, VecDoub_I v1)
 
 inline void abs(VecDoub_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -772,7 +2233,7 @@ inline void abs(VecDoub_O v, VecComp_I v1)
 
 inline void abs(VecComp_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1049,12 +2510,34 @@ inline Doub norm(DcmatComp_I v)
 }
 
 
-inline void resize_cpy(VecInt_IO v, Long_I N)
+inline void resize_cpy(VecChar_IO v, Long_I N, Char_I val = 0)
 {
     Long N0 = v.size();
     if (N != N0) {
         if (N0 == 0) {
-            v.resize(N); copy(v, 0);
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecChar v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(VecInt_IO v, Long_I N, Int_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
         }
         else if (N == 0)
             v.resize(0);
@@ -1062,7 +2545,7 @@ inline void resize_cpy(VecInt_IO v, Long_I N)
             VecInt v1(N);
             if (N > N0) {
                 veccpy(v1.ptr(), v.ptr(), N0);
-                vecset(v1.ptr() + N0, 0, N - N0);
+                vecset(v1.ptr() + N0, val, N - N0);
             }
             else // N < N0
                 veccpy(v1.ptr(), v.ptr(), N);
@@ -1071,12 +2554,56 @@ inline void resize_cpy(VecInt_IO v, Long_I N)
     }
 }
 
-inline void resize_cpy(VecDoub_IO v, Long_I N)
+inline void resize_cpy(VecLlong_IO v, Long_I N, Llong_I val = 0)
 {
     Long N0 = v.size();
     if (N != N0) {
         if (N0 == 0) {
-            v.resize(N); copy(v, 0);
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecLlong v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(VecFloat_IO v, Long_I N, Float_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecFloat v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(VecDoub_IO v, Long_I N, Doub_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
         }
         else if (N == 0)
             v.resize(0);
@@ -1084,7 +2611,7 @@ inline void resize_cpy(VecDoub_IO v, Long_I N)
             VecDoub v1(N);
             if (N > N0) {
                 veccpy(v1.ptr(), v.ptr(), N0);
-                vecset(v1.ptr() + N0, 0, N - N0);
+                vecset(v1.ptr() + N0, val, N - N0);
             }
             else // N < N0
                 veccpy(v1.ptr(), v.ptr(), N);
@@ -1093,18 +2620,106 @@ inline void resize_cpy(VecDoub_IO v, Long_I N)
     }
 }
 
-inline void resize_cpy(CmatInt_IO v, Long_I N1, Long_I N2)
+inline void resize_cpy(VecLdoub_IO v, Long_I N, Ldoub_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecLdoub v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(VecFcomp_IO v, Long_I N, Fcomp_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecFcomp v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(VecComp_IO v, Long_I N, Comp_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecComp v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(VecLcomp_IO v, Long_I N, Lcomp_I val = 0)
+{
+    Long N0 = v.size();
+    if (N != N0) {
+        if (N0 == 0) {
+            v.resize(N); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0);
+        else {
+            VecLcomp v1(N);
+            if (N > N0) {
+                veccpy(v1.ptr(), v.ptr(), N0);
+                vecset(v1.ptr() + N0, val, N - N0);
+            }
+            else // N < N0
+                veccpy(v1.ptr(), v.ptr(), N);
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(CmatChar_IO v, Long_I N1, Long_I N2, Char_I val = 0)
 {
     Long N10 = v.n1(), N20 = v.n2(), N0 = N1*N2;
     Long N = N1 * N2;
     if (N1 != N10 || N2 != N20) {
         if (N0 == 0) {
-            v.resize(N1, N2); copy(v, 0);
+            v.resize(N1, N2); copy(v, val);
         }
         else if (N == 0)
             v.resize(0, 0);
         else {
-            CmatInt v1(N1, N2); copy(v1, 0);
+            CmatChar v1(N1, N2); copy(v1, val);
             Long N1min = min(N1, N10), N2min = min(N2, N20);
             copy(slice(v1, 0, N1min, 0, N2min),
                 slice(v, 0, N1min, 0, N2min));
@@ -1113,18 +2728,18 @@ inline void resize_cpy(CmatInt_IO v, Long_I N1, Long_I N2)
     }
 }
 
-inline void resize_cpy(CmatLlong_IO v, Long_I N1, Long_I N2)
+inline void resize_cpy(CmatInt_IO v, Long_I N1, Long_I N2, Int_I val = 0)
 {
     Long N10 = v.n1(), N20 = v.n2(), N0 = N1*N2;
     Long N = N1 * N2;
     if (N1 != N10 || N2 != N20) {
         if (N0 == 0) {
-            v.resize(N1, N2); copy(v, 0);
+            v.resize(N1, N2); copy(v, val);
         }
         else if (N == 0)
             v.resize(0, 0);
         else {
-            CmatLlong v1(N1, N2); copy(v1, 0);
+            CmatInt v1(N1, N2); copy(v1, val);
             Long N1min = min(N1, N10), N2min = min(N2, N20);
             copy(slice(v1, 0, N1min, 0, N2min),
                 slice(v, 0, N1min, 0, N2min));
@@ -1133,18 +2748,18 @@ inline void resize_cpy(CmatLlong_IO v, Long_I N1, Long_I N2)
     }
 }
 
-inline void resize_cpy(CmatDoub_IO v, Long_I N1, Long_I N2)
+inline void resize_cpy(CmatLlong_IO v, Long_I N1, Long_I N2, Llong_I val = 0)
 {
     Long N10 = v.n1(), N20 = v.n2(), N0 = N1*N2;
     Long N = N1 * N2;
     if (N1 != N10 || N2 != N20) {
         if (N0 == 0) {
-            v.resize(N1, N2); copy(v, 0);
+            v.resize(N1, N2); copy(v, val);
         }
         else if (N == 0)
             v.resize(0, 0);
         else {
-            CmatDoub v1(N1, N2); copy(v1, 0);
+            CmatLlong v1(N1, N2); copy(v1, val);
             Long N1min = min(N1, N10), N2min = min(N2, N20);
             copy(slice(v1, 0, N1min, 0, N2min),
                 slice(v, 0, N1min, 0, N2min));
@@ -1153,18 +2768,78 @@ inline void resize_cpy(CmatDoub_IO v, Long_I N1, Long_I N2)
     }
 }
 
-inline void resize_cpy(Cmat3Doub_IO v, Long_I N1, Long_I N2, Long_I N3)
+inline void resize_cpy(CmatFloat_IO v, Long_I N1, Long_I N2, Float_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N0 = N1*N2;
+    Long N = N1 * N2;
+    if (N1 != N10 || N2 != N20) {
+        if (N0 == 0) {
+            v.resize(N1, N2); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0);
+        else {
+            CmatFloat v1(N1, N2); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20);
+            copy(slice(v1, 0, N1min, 0, N2min),
+                slice(v, 0, N1min, 0, N2min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(CmatDoub_IO v, Long_I N1, Long_I N2, Doub_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N0 = N1*N2;
+    Long N = N1 * N2;
+    if (N1 != N10 || N2 != N20) {
+        if (N0 == 0) {
+            v.resize(N1, N2); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0);
+        else {
+            CmatDoub v1(N1, N2); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20);
+            copy(slice(v1, 0, N1min, 0, N2min),
+                slice(v, 0, N1min, 0, N2min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(CmatLdoub_IO v, Long_I N1, Long_I N2, Ldoub_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N0 = N1*N2;
+    Long N = N1 * N2;
+    if (N1 != N10 || N2 != N20) {
+        if (N0 == 0) {
+            v.resize(N1, N2); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0);
+        else {
+            CmatLdoub v1(N1, N2); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20);
+            copy(slice(v1, 0, N1min, 0, N2min),
+                slice(v, 0, N1min, 0, N2min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(Cmat3Float_IO v, Long_I N1, Long_I N2, Long_I N3, Float_I val = 0)
 {
     Long N10 = v.n1(), N20 = v.n2(), N30 = v.n3(), N0 = N1*N2;
     Long N = N1 * N2 * N3;
     if (N1 != N10 || N2 != N20 || N3 != N30) {
         if (N0 == 0) {
-            v.resize(N1, N2, N3); copy(v, 0);
+            v.resize(N1, N2, N3); copy(v, val);
         }
         else if (N == 0)
             v.resize(0, 0, 0);
         else {
-            Cmat3Doub v1(N1, N2, N3); copy(v1, 0);
+            Cmat3Float v1(N1, N2, N3); copy(v1, val);
             Long N1min = min(N1, N10), N2min = min(N2, N20), N3min = min(N3, N30);
             copy(slice(v1, 0, N1min, 0, N2min, 0, N3min),
                 slice(v, 0, N1min, 0, N2min, 0, N3min));
@@ -1173,18 +2848,98 @@ inline void resize_cpy(Cmat3Doub_IO v, Long_I N1, Long_I N2, Long_I N3)
     }
 }
 
-inline void resize_cpy(Cmat3Comp_IO v, Long_I N1, Long_I N2, Long_I N3)
+inline void resize_cpy(Cmat3Doub_IO v, Long_I N1, Long_I N2, Long_I N3, Doub_I val = 0)
 {
     Long N10 = v.n1(), N20 = v.n2(), N30 = v.n3(), N0 = N1*N2;
     Long N = N1 * N2 * N3;
     if (N1 != N10 || N2 != N20 || N3 != N30) {
         if (N0 == 0) {
-            v.resize(N1, N2, N3); copy(v, 0);
+            v.resize(N1, N2, N3); copy(v, val);
         }
         else if (N == 0)
             v.resize(0, 0, 0);
         else {
-            Cmat3Comp v1(N1, N2, N3); copy(v1, 0);
+            Cmat3Doub v1(N1, N2, N3); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20), N3min = min(N3, N30);
+            copy(slice(v1, 0, N1min, 0, N2min, 0, N3min),
+                slice(v, 0, N1min, 0, N2min, 0, N3min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(Cmat3Ldoub_IO v, Long_I N1, Long_I N2, Long_I N3, Ldoub_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N30 = v.n3(), N0 = N1*N2;
+    Long N = N1 * N2 * N3;
+    if (N1 != N10 || N2 != N20 || N3 != N30) {
+        if (N0 == 0) {
+            v.resize(N1, N2, N3); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0, 0);
+        else {
+            Cmat3Ldoub v1(N1, N2, N3); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20), N3min = min(N3, N30);
+            copy(slice(v1, 0, N1min, 0, N2min, 0, N3min),
+                slice(v, 0, N1min, 0, N2min, 0, N3min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(Cmat3Fcomp_IO v, Long_I N1, Long_I N2, Long_I N3, Fcomp_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N30 = v.n3(), N0 = N1*N2;
+    Long N = N1 * N2 * N3;
+    if (N1 != N10 || N2 != N20 || N3 != N30) {
+        if (N0 == 0) {
+            v.resize(N1, N2, N3); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0, 0);
+        else {
+            Cmat3Fcomp v1(N1, N2, N3); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20), N3min = min(N3, N30);
+            copy(slice(v1, 0, N1min, 0, N2min, 0, N3min),
+                slice(v, 0, N1min, 0, N2min, 0, N3min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(Cmat3Comp_IO v, Long_I N1, Long_I N2, Long_I N3, Comp_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N30 = v.n3(), N0 = N1*N2;
+    Long N = N1 * N2 * N3;
+    if (N1 != N10 || N2 != N20 || N3 != N30) {
+        if (N0 == 0) {
+            v.resize(N1, N2, N3); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0, 0);
+        else {
+            Cmat3Comp v1(N1, N2, N3); copy(v1, val);
+            Long N1min = min(N1, N10), N2min = min(N2, N20), N3min = min(N3, N30);
+            copy(slice(v1, 0, N1min, 0, N2min, 0, N3min),
+                slice(v, 0, N1min, 0, N2min, 0, N3min));
+            v << v1;
+        }
+    }
+}
+
+inline void resize_cpy(Cmat3Lcomp_IO v, Long_I N1, Long_I N2, Long_I N3, Lcomp_I val = 0)
+{
+    Long N10 = v.n1(), N20 = v.n2(), N30 = v.n3(), N0 = N1*N2;
+    Long N = N1 * N2 * N3;
+    if (N1 != N10 || N2 != N20 || N3 != N30) {
+        if (N0 == 0) {
+            v.resize(N1, N2, N3); copy(v, val);
+        }
+        else if (N == 0)
+            v.resize(0, 0, 0);
+        else {
+            Cmat3Lcomp v1(N1, N2, N3); copy(v1, val);
             Long N1min = min(N1, N10), N2min = min(N2, N20), N3min = min(N3, N30);
             copy(slice(v1, 0, N1min, 0, N2min, 0, N3min),
                 slice(v, 0, N1min, 0, N2min, 0, N3min));
@@ -1411,7 +3166,7 @@ inline void flip(VecComp_IO v)
 
 inline void flip(VecChar_O v, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1420,7 +3175,7 @@ inline void flip(VecChar_O v, VecChar_I v1)
 
 inline void flip(VecInt_O v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1429,7 +3184,7 @@ inline void flip(VecInt_O v, VecInt_I v1)
 
 inline void flip(VecLlong_O v, VecLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1438,7 +3193,7 @@ inline void flip(VecLlong_O v, VecLlong_I v1)
 
 inline void flip(VecDoub_O v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1447,7 +3202,7 @@ inline void flip(VecDoub_O v, VecDoub_I v1)
 
 inline void flip(VecComp_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1457,7 +3212,7 @@ inline void flip(VecComp_O v, VecComp_I v1)
 
 inline void reorder(VecInt_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1473,7 +3228,7 @@ inline void reorder(VecInt_O v, VecLlong_I order)
 
 inline void reorder(VecLlong_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1489,7 +3244,7 @@ inline void reorder(VecLlong_O v, VecLlong_I order)
 
 inline void reorder(VecDoub_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1505,7 +3260,7 @@ inline void reorder(VecDoub_O v, VecLlong_I order)
 
 inline void reorder(SvecChar_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1521,7 +3276,7 @@ inline void reorder(SvecChar_O v, VecLlong_I order)
 
 inline void reorder(SvecInt_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1537,7 +3292,7 @@ inline void reorder(SvecInt_O v, VecLlong_I order)
 
 inline void reorder(SvecLlong_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1553,7 +3308,7 @@ inline void reorder(SvecLlong_O v, VecLlong_I order)
 
 inline void reorder(SvecDoub_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1569,7 +3324,7 @@ inline void reorder(SvecDoub_O v, VecLlong_I order)
 
 inline void reorder(SvecComp_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1585,7 +3340,7 @@ inline void reorder(SvecComp_O v, VecLlong_I order)
 
 inline void reorder(vecLlong_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1601,7 +3356,7 @@ inline void reorder(vecLlong_O v, VecLlong_I order)
 
 inline void reorder(vecStr_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1617,7 +3372,7 @@ inline void reorder(vecStr_O v, VecLlong_I order)
 
 inline void reorder(vecStr_O v, vecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1633,7 +3388,7 @@ inline void reorder(vecStr_O v, vecLlong_I order)
 
 inline void reorder(vecStr32_O v, VecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1649,7 +3404,7 @@ inline void reorder(vecStr32_O v, VecLlong_I order)
 
 inline void reorder(vecStr32_O v, vecLlong_I order)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if ((Long)order.size() != (Long)v.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -1666,7 +3421,7 @@ inline void reorder(vecStr32_O v, vecLlong_I order)
 
 inline void trans(CmatDoub_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -1677,7 +3432,7 @@ inline void trans(CmatDoub_IO v)
 
 inline void trans(CmatComp_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -1688,7 +3443,7 @@ inline void trans(CmatComp_IO v)
 
 inline void trans(MatComp_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -1699,7 +3454,7 @@ inline void trans(MatComp_IO v)
 
 inline void trans(DcmatDoub_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -1710,7 +3465,7 @@ inline void trans(DcmatDoub_IO v)
 
 inline void trans(DcmatComp_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -1722,7 +3477,7 @@ inline void trans(DcmatComp_IO v)
 
 inline void trans(CmatLlong_O v, CmatLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1733,7 +3488,7 @@ inline void trans(CmatLlong_O v, CmatLlong_I v1)
 
 inline void trans(CmatDoub_O v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1744,7 +3499,7 @@ inline void trans(CmatDoub_O v, CmatDoub_I v1)
 
 inline void trans(MatComp_O v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1755,7 +3510,7 @@ inline void trans(MatComp_O v, CmatComp_I v1)
 
 inline void trans(CmatComp_O v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1766,7 +3521,7 @@ inline void trans(CmatComp_O v, CmatComp_I v1)
 
 inline void trans(CmatComp_O v, MatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1777,7 +3532,7 @@ inline void trans(CmatComp_O v, MatComp_I v1)
 
 inline void trans(ScmatDoub_O v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1788,7 +3543,7 @@ inline void trans(ScmatDoub_O v, ScmatDoub_I v1)
 
 inline void trans(ScmatComp_O v, ScmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1799,7 +3554,7 @@ inline void trans(ScmatComp_O v, ScmatComp_I v1)
 
 inline void trans(DcmatLlong_O v, DcmatLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1810,7 +3565,7 @@ inline void trans(DcmatLlong_O v, DcmatLlong_I v1)
 
 inline void trans(DcmatDoub_O v, DcmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1821,7 +3576,7 @@ inline void trans(DcmatDoub_O v, DcmatDoub_I v1)
 
 inline void trans(DcmatComp_O v, DcmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v1.n2() || v.n2() != v1.n1())
         SLS_ERR("wrong size!");
 #endif
@@ -1870,7 +3625,7 @@ inline void conj(DcmatComp_IO v)
 
 inline void conj(CmatComp_O v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1879,7 +3634,7 @@ inline void conj(CmatComp_O v, CmatComp_I v1)
 
 inline void conj(MatComp_O v, MatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -1889,7 +3644,7 @@ inline void conj(MatComp_O v, MatComp_I v1)
 
 inline void her(CmatComp_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2()) SLS_ERR("illegal shape!");
 #endif
     trans(v); conj(v);
@@ -1897,7 +3652,7 @@ inline void her(CmatComp_IO v)
 
 inline void her(MatComp_IO v)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (v.n1() != v.n2()) SLS_ERR("illegal shape!");
 #endif
     trans(v); conj(v);
@@ -2582,7 +4337,7 @@ inline void divide_equals_vv(Comp *v, const Comp *v1, Long_I N)
 
 inline void operator+=(VecChar_O &v, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2591,7 +4346,7 @@ inline void operator+=(VecChar_O &v, VecChar_I v1)
 
 inline void operator-=(VecChar_O &v, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2600,7 +4355,7 @@ inline void operator-=(VecChar_O &v, VecChar_I v1)
 
 inline void operator*=(VecChar_O &v, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2609,7 +4364,7 @@ inline void operator*=(VecChar_O &v, VecChar_I v1)
 
 inline void operator/=(VecChar_O &v, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2618,7 +4373,7 @@ inline void operator/=(VecChar_O &v, VecChar_I v1)
 
 inline void operator+=(VecInt_O &v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2627,7 +4382,7 @@ inline void operator+=(VecInt_O &v, VecInt_I v1)
 
 inline void operator-=(VecInt_O &v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2636,7 +4391,7 @@ inline void operator-=(VecInt_O &v, VecInt_I v1)
 
 inline void operator*=(VecInt_O &v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2645,7 +4400,7 @@ inline void operator*=(VecInt_O &v, VecInt_I v1)
 
 inline void operator/=(VecInt_O &v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2654,7 +4409,7 @@ inline void operator/=(VecInt_O &v, VecInt_I v1)
 
 inline void operator+=(VecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2663,7 +4418,7 @@ inline void operator+=(VecDoub_O &v, VecDoub_I v1)
 
 inline void operator-=(VecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2672,7 +4427,7 @@ inline void operator-=(VecDoub_O &v, VecDoub_I v1)
 
 inline void operator*=(VecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2681,7 +4436,7 @@ inline void operator*=(VecDoub_O &v, VecDoub_I v1)
 
 inline void operator/=(VecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2690,7 +4445,7 @@ inline void operator/=(VecDoub_O &v, VecDoub_I v1)
 
 inline void operator+=(VecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2699,7 +4454,7 @@ inline void operator+=(VecDoub_O &v, SvecDoub_I v1)
 
 inline void operator-=(VecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2708,7 +4463,7 @@ inline void operator-=(VecDoub_O &v, SvecDoub_I v1)
 
 inline void operator*=(VecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2717,7 +4472,7 @@ inline void operator*=(VecDoub_O &v, SvecDoub_I v1)
 
 inline void operator/=(VecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2726,7 +4481,7 @@ inline void operator/=(VecDoub_O &v, SvecDoub_I v1)
 
 inline void operator+=(VecComp_O &v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2735,7 +4490,7 @@ inline void operator+=(VecComp_O &v, VecComp_I v1)
 
 inline void operator-=(VecComp_O &v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2744,7 +4499,7 @@ inline void operator-=(VecComp_O &v, VecComp_I v1)
 
 inline void operator*=(VecComp_O &v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2753,7 +4508,7 @@ inline void operator*=(VecComp_O &v, VecComp_I v1)
 
 inline void operator/=(VecComp_O &v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2762,7 +4517,7 @@ inline void operator/=(VecComp_O &v, VecComp_I v1)
 
 inline void operator+=(VecComp_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2771,7 +4526,7 @@ inline void operator+=(VecComp_O &v, VecDoub_I v1)
 
 inline void operator-=(VecComp_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2780,7 +4535,7 @@ inline void operator-=(VecComp_O &v, VecDoub_I v1)
 
 inline void operator*=(VecComp_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2789,7 +4544,7 @@ inline void operator*=(VecComp_O &v, VecDoub_I v1)
 
 inline void operator/=(VecComp_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2798,7 +4553,7 @@ inline void operator/=(VecComp_O &v, VecDoub_I v1)
 
 inline void operator+=(MatDoub_O &v, MatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2807,7 +4562,7 @@ inline void operator+=(MatDoub_O &v, MatDoub_I v1)
 
 inline void operator-=(MatDoub_O &v, MatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2816,7 +4571,7 @@ inline void operator-=(MatDoub_O &v, MatDoub_I v1)
 
 inline void operator*=(MatDoub_O &v, MatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2825,7 +4580,7 @@ inline void operator*=(MatDoub_O &v, MatDoub_I v1)
 
 inline void operator/=(MatDoub_O &v, MatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2834,7 +4589,7 @@ inline void operator/=(MatDoub_O &v, MatDoub_I v1)
 
 inline void operator+=(MatComp_O &v, MatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2843,7 +4598,7 @@ inline void operator+=(MatComp_O &v, MatComp_I v1)
 
 inline void operator-=(MatComp_O &v, MatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2852,7 +4607,7 @@ inline void operator-=(MatComp_O &v, MatComp_I v1)
 
 inline void operator*=(MatComp_O &v, MatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2861,7 +4616,7 @@ inline void operator*=(MatComp_O &v, MatComp_I v1)
 
 inline void operator/=(MatComp_O &v, MatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2870,7 +4625,7 @@ inline void operator/=(MatComp_O &v, MatComp_I v1)
 
 inline void operator+=(CmatDoub_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2879,7 +4634,7 @@ inline void operator+=(CmatDoub_O &v, CmatDoub_I v1)
 
 inline void operator-=(CmatDoub_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2888,7 +4643,7 @@ inline void operator-=(CmatDoub_O &v, CmatDoub_I v1)
 
 inline void operator*=(CmatDoub_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2897,7 +4652,7 @@ inline void operator*=(CmatDoub_O &v, CmatDoub_I v1)
 
 inline void operator/=(CmatDoub_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2906,7 +4661,7 @@ inline void operator/=(CmatDoub_O &v, CmatDoub_I v1)
 
 inline void operator+=(CmatComp_O &v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2915,7 +4670,7 @@ inline void operator+=(CmatComp_O &v, CmatComp_I v1)
 
 inline void operator-=(CmatComp_O &v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2924,7 +4679,7 @@ inline void operator-=(CmatComp_O &v, CmatComp_I v1)
 
 inline void operator*=(CmatComp_O &v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2933,7 +4688,7 @@ inline void operator*=(CmatComp_O &v, CmatComp_I v1)
 
 inline void operator/=(CmatComp_O &v, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2942,7 +4697,7 @@ inline void operator/=(CmatComp_O &v, CmatComp_I v1)
 
 inline void operator+=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2951,7 +4706,7 @@ inline void operator+=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 
 inline void operator-=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2960,7 +4715,7 @@ inline void operator-=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 
 inline void operator*=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2969,7 +4724,7 @@ inline void operator*=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 
 inline void operator/=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2978,7 +4733,7 @@ inline void operator/=(Cmat3Doub_O &v, Cmat3Doub_I v1)
 
 inline void operator+=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2987,7 +4742,7 @@ inline void operator+=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 
 inline void operator-=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -2996,7 +4751,7 @@ inline void operator-=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 
 inline void operator*=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3005,7 +4760,7 @@ inline void operator*=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 
 inline void operator/=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3014,7 +4769,7 @@ inline void operator/=(Cmat3Comp_O &v, Cmat3Comp_I v1)
 
 inline void operator+=(SvecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3023,7 +4778,7 @@ inline void operator+=(SvecDoub_O &v, VecDoub_I v1)
 
 inline void operator-=(SvecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3032,7 +4787,7 @@ inline void operator-=(SvecDoub_O &v, VecDoub_I v1)
 
 inline void operator*=(SvecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3041,7 +4796,7 @@ inline void operator*=(SvecDoub_O &v, VecDoub_I v1)
 
 inline void operator/=(SvecDoub_O &v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3050,7 +4805,7 @@ inline void operator/=(SvecDoub_O &v, VecDoub_I v1)
 
 inline void operator+=(SvecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3059,7 +4814,7 @@ inline void operator+=(SvecDoub_O &v, SvecDoub_I v1)
 
 inline void operator-=(SvecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3068,7 +4823,7 @@ inline void operator-=(SvecDoub_O &v, SvecDoub_I v1)
 
 inline void operator*=(SvecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3077,7 +4832,7 @@ inline void operator*=(SvecDoub_O &v, SvecDoub_I v1)
 
 inline void operator/=(SvecDoub_O &v, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3086,7 +4841,7 @@ inline void operator/=(SvecDoub_O &v, SvecDoub_I v1)
 
 inline void operator+=(SvecComp_O &v, SvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3095,7 +4850,7 @@ inline void operator+=(SvecComp_O &v, SvecComp_I v1)
 
 inline void operator-=(SvecComp_O &v, SvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3104,7 +4859,7 @@ inline void operator-=(SvecComp_O &v, SvecComp_I v1)
 
 inline void operator*=(SvecComp_O &v, SvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3113,7 +4868,7 @@ inline void operator*=(SvecComp_O &v, SvecComp_I v1)
 
 inline void operator/=(SvecComp_O &v, SvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3123,7 +4878,7 @@ inline void operator/=(SvecComp_O &v, SvecComp_I v1)
 // v += v
 inline void operator+=(SvecComp_O &v, DvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3134,7 +4889,7 @@ inline void operator+=(SvecComp_O &v, DvecComp_I v1)
 // v -= v
 inline void operator-=(SvecComp_O &v, DvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3145,7 +4900,7 @@ inline void operator-=(SvecComp_O &v, DvecComp_I v1)
 // v *= v
 inline void operator*=(SvecComp_O &v, DvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3156,7 +4911,7 @@ inline void operator*=(SvecComp_O &v, DvecComp_I v1)
 // v /= v
 inline void operator/=(SvecComp_O &v, DvecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3166,7 +4921,7 @@ inline void operator/=(SvecComp_O &v, DvecComp_I v1)
 
 inline void operator+=(ScmatDoub_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3175,7 +4930,7 @@ inline void operator+=(ScmatDoub_O &v, ScmatDoub_I v1)
 
 inline void operator-=(ScmatDoub_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3184,7 +4939,7 @@ inline void operator-=(ScmatDoub_O &v, ScmatDoub_I v1)
 
 inline void operator*=(ScmatDoub_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3193,7 +4948,7 @@ inline void operator*=(ScmatDoub_O &v, ScmatDoub_I v1)
 
 inline void operator/=(ScmatDoub_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3202,7 +4957,7 @@ inline void operator/=(ScmatDoub_O &v, ScmatDoub_I v1)
 
 inline void operator+=(ScmatComp_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3211,7 +4966,7 @@ inline void operator+=(ScmatComp_O &v, CmatDoub_I v1)
 
 inline void operator-=(ScmatComp_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3220,7 +4975,7 @@ inline void operator-=(ScmatComp_O &v, CmatDoub_I v1)
 
 inline void operator*=(ScmatComp_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3229,7 +4984,7 @@ inline void operator*=(ScmatComp_O &v, CmatDoub_I v1)
 
 inline void operator/=(ScmatComp_O &v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3238,7 +4993,7 @@ inline void operator/=(ScmatComp_O &v, CmatDoub_I v1)
 
 inline void operator+=(ScmatComp_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3247,7 +5002,7 @@ inline void operator+=(ScmatComp_O &v, ScmatDoub_I v1)
 
 inline void operator-=(ScmatComp_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3256,7 +5011,7 @@ inline void operator-=(ScmatComp_O &v, ScmatDoub_I v1)
 
 inline void operator*=(ScmatComp_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3265,7 +5020,7 @@ inline void operator*=(ScmatComp_O &v, ScmatDoub_I v1)
 
 inline void operator/=(ScmatComp_O &v, ScmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3274,7 +5029,7 @@ inline void operator/=(ScmatComp_O &v, ScmatDoub_I v1)
 
 inline void operator+=(ScmatComp_O &v, ScmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3283,7 +5038,7 @@ inline void operator+=(ScmatComp_O &v, ScmatComp_I v1)
 
 inline void operator-=(ScmatComp_O &v, ScmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3292,7 +5047,7 @@ inline void operator-=(ScmatComp_O &v, ScmatComp_I v1)
 
 inline void operator*=(ScmatComp_O &v, ScmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3301,7 +5056,7 @@ inline void operator*=(ScmatComp_O &v, ScmatComp_I v1)
 
 inline void operator/=(ScmatComp_O &v, ScmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3311,7 +5066,7 @@ inline void operator/=(ScmatComp_O &v, ScmatComp_I v1)
 // v += v (slow!)
 inline void operator+=(DcmatComp_O &v, DcmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3323,7 +5078,7 @@ inline void operator+=(DcmatComp_O &v, DcmatDoub_I v1)
 // v -= v (slow!)
 inline void operator-=(DcmatComp_O &v, DcmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3335,7 +5090,7 @@ inline void operator-=(DcmatComp_O &v, DcmatDoub_I v1)
 // v *= v (slow!)
 inline void operator*=(DcmatComp_O &v, DcmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3347,7 +5102,7 @@ inline void operator*=(DcmatComp_O &v, DcmatDoub_I v1)
 // v /= v (slow!)
 inline void operator/=(DcmatComp_O &v, DcmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong shape!");
 #endif
@@ -3890,7 +5645,7 @@ inline void divide_vvv(Comp *v, const Comp *v1, const Comp *v2, Long_I N)
 
 inline void plus(VecChar_O v, VecChar_I v1, Char_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3904,7 +5659,7 @@ inline void plus(VecChar_O v, Char_I s, VecChar_I v1)
 
 inline void minus(VecChar_O v, VecChar_I v1, Char_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3913,7 +5668,7 @@ inline void minus(VecChar_O v, VecChar_I v1, Char_I s)
 
 inline void minus(VecChar_O v, Char_I s, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3922,7 +5677,7 @@ inline void minus(VecChar_O v, Char_I s, VecChar_I v1)
 
 inline void times(VecChar_O v, VecChar_I v1, Char_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3936,7 +5691,7 @@ inline void times(VecChar_O v, Char_I s, VecChar_I v1)
 
 inline void divide(VecChar_O v, VecChar_I v1, Char_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3945,7 +5700,7 @@ inline void divide(VecChar_O v, VecChar_I v1, Char_I s)
 
 inline void divide(VecChar_O v, Char_I s, VecChar_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3954,7 +5709,7 @@ inline void divide(VecChar_O v, Char_I s, VecChar_I v1)
 
 inline void plus(VecInt_O v, VecInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3968,7 +5723,7 @@ inline void plus(VecInt_O v, Int_I s, VecInt_I v1)
 
 inline void minus(VecInt_O v, VecInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3977,7 +5732,7 @@ inline void minus(VecInt_O v, VecInt_I v1, Int_I s)
 
 inline void minus(VecInt_O v, Int_I s, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -3986,7 +5741,7 @@ inline void minus(VecInt_O v, Int_I s, VecInt_I v1)
 
 inline void times(VecInt_O v, VecInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4000,7 +5755,7 @@ inline void times(VecInt_O v, Int_I s, VecInt_I v1)
 
 inline void divide(VecInt_O v, VecInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4009,7 +5764,7 @@ inline void divide(VecInt_O v, VecInt_I v1, Int_I s)
 
 inline void divide(VecInt_O v, Int_I s, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4018,7 +5773,7 @@ inline void divide(VecInt_O v, Int_I s, VecInt_I v1)
 
 inline void plus(VecLlong_O v, VecLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4032,7 +5787,7 @@ inline void plus(VecLlong_O v, Llong_I s, VecLlong_I v1)
 
 inline void minus(VecLlong_O v, VecLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4041,7 +5796,7 @@ inline void minus(VecLlong_O v, VecLlong_I v1, Llong_I s)
 
 inline void minus(VecLlong_O v, Llong_I s, VecLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4050,7 +5805,7 @@ inline void minus(VecLlong_O v, Llong_I s, VecLlong_I v1)
 
 inline void times(VecLlong_O v, VecLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4064,7 +5819,7 @@ inline void times(VecLlong_O v, Llong_I s, VecLlong_I v1)
 
 inline void divide(VecLlong_O v, VecLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4073,7 +5828,7 @@ inline void divide(VecLlong_O v, VecLlong_I v1, Llong_I s)
 
 inline void divide(VecLlong_O v, Llong_I s, VecLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4082,7 +5837,7 @@ inline void divide(VecLlong_O v, Llong_I s, VecLlong_I v1)
 
 inline void plus(VecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4096,7 +5851,7 @@ inline void plus(VecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void minus(VecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4105,7 +5860,7 @@ inline void minus(VecDoub_O v, VecDoub_I v1, Doub_I s)
 
 inline void minus(VecDoub_O v, Doub_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4114,7 +5869,7 @@ inline void minus(VecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void times(VecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4128,7 +5883,7 @@ inline void times(VecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void divide(VecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4137,7 +5892,7 @@ inline void divide(VecDoub_O v, VecDoub_I v1, Doub_I s)
 
 inline void divide(VecDoub_O v, Doub_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4146,7 +5901,7 @@ inline void divide(VecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void plus(VecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4160,7 +5915,7 @@ inline void plus(VecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void minus(VecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4169,7 +5924,7 @@ inline void minus(VecDoub_O v, SvecDoub_I v1, Doub_I s)
 
 inline void minus(VecDoub_O v, Doub_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4178,7 +5933,7 @@ inline void minus(VecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void times(VecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4192,7 +5947,7 @@ inline void times(VecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void divide(VecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4201,7 +5956,7 @@ inline void divide(VecDoub_O v, SvecDoub_I v1, Doub_I s)
 
 inline void divide(VecDoub_O v, Doub_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4210,7 +5965,7 @@ inline void divide(VecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void plus(VecComp_O v, VecComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4224,7 +5979,7 @@ inline void plus(VecComp_O v, Doub_I s, VecComp_I v1)
 
 inline void minus(VecComp_O v, VecComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4233,7 +5988,7 @@ inline void minus(VecComp_O v, VecComp_I v1, Doub_I s)
 
 inline void minus(VecComp_O v, Doub_I s, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4242,7 +5997,7 @@ inline void minus(VecComp_O v, Doub_I s, VecComp_I v1)
 
 inline void times(VecComp_O v, VecComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4256,7 +6011,7 @@ inline void times(VecComp_O v, Doub_I s, VecComp_I v1)
 
 inline void divide(VecComp_O v, VecComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4265,7 +6020,7 @@ inline void divide(VecComp_O v, VecComp_I v1, Doub_I s)
 
 inline void divide(VecComp_O v, Doub_I s, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4274,7 +6029,7 @@ inline void divide(VecComp_O v, Doub_I s, VecComp_I v1)
 
 inline void plus(VecComp_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4288,7 +6043,7 @@ inline void plus(VecComp_O v, Doub_I s, VecDoub_I v1)
 
 inline void minus(VecComp_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4297,7 +6052,7 @@ inline void minus(VecComp_O v, VecDoub_I v1, Doub_I s)
 
 inline void minus(VecComp_O v, Doub_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4306,7 +6061,7 @@ inline void minus(VecComp_O v, Doub_I s, VecDoub_I v1)
 
 inline void times(VecComp_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4320,7 +6075,7 @@ inline void times(VecComp_O v, Doub_I s, VecDoub_I v1)
 
 inline void divide(VecComp_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4329,7 +6084,7 @@ inline void divide(VecComp_O v, VecDoub_I v1, Doub_I s)
 
 inline void divide(VecComp_O v, Doub_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4338,7 +6093,7 @@ inline void divide(VecComp_O v, Doub_I s, VecDoub_I v1)
 
 inline void plus(VecComp_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4352,7 +6107,7 @@ inline void plus(VecComp_O v, Doub_I s, SvecDoub_I v1)
 
 inline void minus(VecComp_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4361,7 +6116,7 @@ inline void minus(VecComp_O v, SvecDoub_I v1, Doub_I s)
 
 inline void minus(VecComp_O v, Doub_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4370,7 +6125,7 @@ inline void minus(VecComp_O v, Doub_I s, SvecDoub_I v1)
 
 inline void times(VecComp_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4384,7 +6139,7 @@ inline void times(VecComp_O v, Doub_I s, SvecDoub_I v1)
 
 inline void divide(VecComp_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4393,7 +6148,7 @@ inline void divide(VecComp_O v, SvecDoub_I v1, Doub_I s)
 
 inline void divide(VecComp_O v, Doub_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4402,7 +6157,7 @@ inline void divide(VecComp_O v, Doub_I s, SvecDoub_I v1)
 
 inline void plus(VecComp_O v, SvecDoub_I v1, Imag_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4416,7 +6171,7 @@ inline void plus(VecComp_O v, Imag_I s, SvecDoub_I v1)
 
 inline void minus(VecComp_O v, SvecDoub_I v1, Imag_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4425,7 +6180,7 @@ inline void minus(VecComp_O v, SvecDoub_I v1, Imag_I s)
 
 inline void minus(VecComp_O v, Imag_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4434,7 +6189,7 @@ inline void minus(VecComp_O v, Imag_I s, SvecDoub_I v1)
 
 inline void times(VecComp_O v, SvecDoub_I v1, Imag_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4448,7 +6203,7 @@ inline void times(VecComp_O v, Imag_I s, SvecDoub_I v1)
 
 inline void divide(VecComp_O v, SvecDoub_I v1, Imag_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4457,7 +6212,7 @@ inline void divide(VecComp_O v, SvecDoub_I v1, Imag_I s)
 
 inline void divide(VecComp_O v, Imag_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4466,7 +6221,7 @@ inline void divide(VecComp_O v, Imag_I s, SvecDoub_I v1)
 
 inline void plus(SvecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4480,7 +6235,7 @@ inline void plus(SvecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void minus(SvecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4489,7 +6244,7 @@ inline void minus(SvecDoub_O v, SvecDoub_I v1, Doub_I s)
 
 inline void minus(SvecDoub_O v, Doub_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4498,7 +6253,7 @@ inline void minus(SvecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void times(SvecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4512,7 +6267,7 @@ inline void times(SvecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void divide(SvecDoub_O v, SvecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4521,7 +6276,7 @@ inline void divide(SvecDoub_O v, SvecDoub_I v1, Doub_I s)
 
 inline void divide(SvecDoub_O v, Doub_I s, SvecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4530,7 +6285,7 @@ inline void divide(SvecDoub_O v, Doub_I s, SvecDoub_I v1)
 
 inline void plus(SvecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4544,7 +6299,7 @@ inline void plus(SvecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void minus(SvecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4553,7 +6308,7 @@ inline void minus(SvecDoub_O v, VecDoub_I v1, Doub_I s)
 
 inline void minus(SvecDoub_O v, Doub_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4562,7 +6317,7 @@ inline void minus(SvecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void times(SvecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4576,7 +6331,7 @@ inline void times(SvecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void divide(SvecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4585,7 +6340,7 @@ inline void divide(SvecDoub_O v, VecDoub_I v1, Doub_I s)
 
 inline void divide(SvecDoub_O v, Doub_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4594,7 +6349,7 @@ inline void divide(SvecDoub_O v, Doub_I s, VecDoub_I v1)
 
 inline void plus(VecComp_O v, VecDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4608,7 +6363,7 @@ inline void plus(VecComp_O v, Comp_I s, VecDoub_I v1)
 
 inline void minus(VecComp_O v, VecDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4617,7 +6372,7 @@ inline void minus(VecComp_O v, VecDoub_I v1, Comp_I s)
 
 inline void minus(VecComp_O v, Comp_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4626,7 +6381,7 @@ inline void minus(VecComp_O v, Comp_I s, VecDoub_I v1)
 
 inline void times(VecComp_O v, VecDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4640,7 +6395,7 @@ inline void times(VecComp_O v, Comp_I s, VecDoub_I v1)
 
 inline void divide(VecComp_O v, VecDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4649,7 +6404,7 @@ inline void divide(VecComp_O v, VecDoub_I v1, Comp_I s)
 
 inline void divide(VecComp_O v, Comp_I s, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4658,7 +6413,7 @@ inline void divide(VecComp_O v, Comp_I s, VecDoub_I v1)
 
 inline void plus(VecComp_O v, VecComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4672,7 +6427,7 @@ inline void plus(VecComp_O v, Comp_I s, VecComp_I v1)
 
 inline void minus(VecComp_O v, VecComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4681,7 +6436,7 @@ inline void minus(VecComp_O v, VecComp_I v1, Comp_I s)
 
 inline void minus(VecComp_O v, Comp_I s, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4690,7 +6445,7 @@ inline void minus(VecComp_O v, Comp_I s, VecComp_I v1)
 
 inline void times(VecComp_O v, VecComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4704,7 +6459,7 @@ inline void times(VecComp_O v, Comp_I s, VecComp_I v1)
 
 inline void divide(VecComp_O v, VecComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4713,7 +6468,7 @@ inline void divide(VecComp_O v, VecComp_I v1, Comp_I s)
 
 inline void divide(VecComp_O v, Comp_I s, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4722,7 +6477,7 @@ inline void divide(VecComp_O v, Comp_I s, VecComp_I v1)
 
 inline void plus(CmatInt_O v, CmatInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4736,7 +6491,7 @@ inline void plus(CmatInt_O v, Int_I s, CmatInt_I v1)
 
 inline void minus(CmatInt_O v, CmatInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4745,7 +6500,7 @@ inline void minus(CmatInt_O v, CmatInt_I v1, Int_I s)
 
 inline void minus(CmatInt_O v, Int_I s, CmatInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4754,7 +6509,7 @@ inline void minus(CmatInt_O v, Int_I s, CmatInt_I v1)
 
 inline void times(CmatInt_O v, CmatInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4768,7 +6523,7 @@ inline void times(CmatInt_O v, Int_I s, CmatInt_I v1)
 
 inline void divide(CmatInt_O v, CmatInt_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4777,7 +6532,7 @@ inline void divide(CmatInt_O v, CmatInt_I v1, Int_I s)
 
 inline void divide(CmatInt_O v, Int_I s, CmatInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4786,7 +6541,7 @@ inline void divide(CmatInt_O v, Int_I s, CmatInt_I v1)
 
 inline void plus(CmatLlong_O v, CmatLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4800,7 +6555,7 @@ inline void plus(CmatLlong_O v, Llong_I s, CmatLlong_I v1)
 
 inline void minus(CmatLlong_O v, CmatLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4809,7 +6564,7 @@ inline void minus(CmatLlong_O v, CmatLlong_I v1, Llong_I s)
 
 inline void minus(CmatLlong_O v, Llong_I s, CmatLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4818,7 +6573,7 @@ inline void minus(CmatLlong_O v, Llong_I s, CmatLlong_I v1)
 
 inline void times(CmatLlong_O v, CmatLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4832,7 +6587,7 @@ inline void times(CmatLlong_O v, Llong_I s, CmatLlong_I v1)
 
 inline void divide(CmatLlong_O v, CmatLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4841,7 +6596,7 @@ inline void divide(CmatLlong_O v, CmatLlong_I v1, Llong_I s)
 
 inline void divide(CmatLlong_O v, Llong_I s, CmatLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4850,7 +6605,7 @@ inline void divide(CmatLlong_O v, Llong_I s, CmatLlong_I v1)
 
 inline void plus(CmatDoub_O v, CmatDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4864,7 +6619,7 @@ inline void plus(CmatDoub_O v, Doub_I s, CmatDoub_I v1)
 
 inline void minus(CmatDoub_O v, CmatDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4873,7 +6628,7 @@ inline void minus(CmatDoub_O v, CmatDoub_I v1, Doub_I s)
 
 inline void minus(CmatDoub_O v, Doub_I s, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4882,7 +6637,7 @@ inline void minus(CmatDoub_O v, Doub_I s, CmatDoub_I v1)
 
 inline void times(CmatDoub_O v, CmatDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4896,7 +6651,7 @@ inline void times(CmatDoub_O v, Doub_I s, CmatDoub_I v1)
 
 inline void divide(CmatDoub_O v, CmatDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4905,7 +6660,7 @@ inline void divide(CmatDoub_O v, CmatDoub_I v1, Doub_I s)
 
 inline void divide(CmatDoub_O v, Doub_I s, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4914,7 +6669,7 @@ inline void divide(CmatDoub_O v, Doub_I s, CmatDoub_I v1)
 
 inline void plus(CmatComp_O v, CmatComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4928,7 +6683,7 @@ inline void plus(CmatComp_O v, Doub_I s, CmatComp_I v1)
 
 inline void minus(CmatComp_O v, CmatComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4937,7 +6692,7 @@ inline void minus(CmatComp_O v, CmatComp_I v1, Doub_I s)
 
 inline void minus(CmatComp_O v, Doub_I s, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4946,7 +6701,7 @@ inline void minus(CmatComp_O v, Doub_I s, CmatComp_I v1)
 
 inline void times(CmatComp_O v, CmatComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4960,7 +6715,7 @@ inline void times(CmatComp_O v, Doub_I s, CmatComp_I v1)
 
 inline void divide(CmatComp_O v, CmatComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4969,7 +6724,7 @@ inline void divide(CmatComp_O v, CmatComp_I v1, Doub_I s)
 
 inline void divide(CmatComp_O v, Doub_I s, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4978,7 +6733,7 @@ inline void divide(CmatComp_O v, Doub_I s, CmatComp_I v1)
 
 inline void plus(CmatComp_O v, CmatDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -4992,7 +6747,7 @@ inline void plus(CmatComp_O v, Comp_I s, CmatDoub_I v1)
 
 inline void minus(CmatComp_O v, CmatDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5001,7 +6756,7 @@ inline void minus(CmatComp_O v, CmatDoub_I v1, Comp_I s)
 
 inline void minus(CmatComp_O v, Comp_I s, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5010,7 +6765,7 @@ inline void minus(CmatComp_O v, Comp_I s, CmatDoub_I v1)
 
 inline void times(CmatComp_O v, CmatDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5024,7 +6779,7 @@ inline void times(CmatComp_O v, Comp_I s, CmatDoub_I v1)
 
 inline void divide(CmatComp_O v, CmatDoub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5033,7 +6788,7 @@ inline void divide(CmatComp_O v, CmatDoub_I v1, Comp_I s)
 
 inline void divide(CmatComp_O v, Comp_I s, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5042,7 +6797,7 @@ inline void divide(CmatComp_O v, Comp_I s, CmatDoub_I v1)
 
 inline void plus(CmatComp_O v, CmatComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5056,7 +6811,7 @@ inline void plus(CmatComp_O v, Comp_I s, CmatComp_I v1)
 
 inline void minus(CmatComp_O v, CmatComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5065,7 +6820,7 @@ inline void minus(CmatComp_O v, CmatComp_I v1, Comp_I s)
 
 inline void minus(CmatComp_O v, Comp_I s, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5074,7 +6829,7 @@ inline void minus(CmatComp_O v, Comp_I s, CmatComp_I v1)
 
 inline void times(CmatComp_O v, CmatComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5088,7 +6843,7 @@ inline void times(CmatComp_O v, Comp_I s, CmatComp_I v1)
 
 inline void divide(CmatComp_O v, CmatComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5097,7 +6852,7 @@ inline void divide(CmatComp_O v, CmatComp_I v1, Comp_I s)
 
 inline void divide(CmatComp_O v, Comp_I s, CmatComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5106,7 +6861,7 @@ inline void divide(CmatComp_O v, Comp_I s, CmatComp_I v1)
 
 inline void plus(Cmat3Comp_O v, Cmat3Comp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5120,7 +6875,7 @@ inline void plus(Cmat3Comp_O v, Comp_I s, Cmat3Comp_I v1)
 
 inline void minus(Cmat3Comp_O v, Cmat3Comp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5129,7 +6884,7 @@ inline void minus(Cmat3Comp_O v, Cmat3Comp_I v1, Comp_I s)
 
 inline void minus(Cmat3Comp_O v, Comp_I s, Cmat3Comp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5138,7 +6893,7 @@ inline void minus(Cmat3Comp_O v, Comp_I s, Cmat3Comp_I v1)
 
 inline void times(Cmat3Comp_O v, Cmat3Comp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5152,7 +6907,7 @@ inline void times(Cmat3Comp_O v, Comp_I s, Cmat3Comp_I v1)
 
 inline void divide(Cmat3Comp_O v, Cmat3Comp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5161,7 +6916,7 @@ inline void divide(Cmat3Comp_O v, Cmat3Comp_I v1, Comp_I s)
 
 inline void divide(Cmat3Comp_O v, Comp_I s, Cmat3Comp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5170,7 +6925,7 @@ inline void divide(Cmat3Comp_O v, Comp_I s, Cmat3Comp_I v1)
 
 inline void plus(Cmat3Comp_O v, Cmat3Doub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5184,7 +6939,7 @@ inline void plus(Cmat3Comp_O v, Comp_I s, Cmat3Doub_I v1)
 
 inline void minus(Cmat3Comp_O v, Cmat3Doub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5193,7 +6948,7 @@ inline void minus(Cmat3Comp_O v, Cmat3Doub_I v1, Comp_I s)
 
 inline void minus(Cmat3Comp_O v, Comp_I s, Cmat3Doub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5202,7 +6957,7 @@ inline void minus(Cmat3Comp_O v, Comp_I s, Cmat3Doub_I v1)
 
 inline void times(Cmat3Comp_O v, Cmat3Doub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5216,7 +6971,7 @@ inline void times(Cmat3Comp_O v, Comp_I s, Cmat3Doub_I v1)
 
 inline void divide(Cmat3Comp_O v, Cmat3Doub_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5225,7 +6980,7 @@ inline void divide(Cmat3Comp_O v, Cmat3Doub_I v1, Comp_I s)
 
 inline void divide(Cmat3Comp_O v, Comp_I s, Cmat3Doub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5235,7 +6990,7 @@ inline void divide(Cmat3Comp_O v, Comp_I s, Cmat3Doub_I v1)
 
 inline void plus(VecChar_O v, VecChar_I v1, VecChar_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5244,7 +6999,7 @@ inline void plus(VecChar_O v, VecChar_I v1, VecChar_I v2)
 
 inline void minus(VecChar_O v, VecChar_I v1, VecChar_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5253,7 +7008,7 @@ inline void minus(VecChar_O v, VecChar_I v1, VecChar_I v2)
 
 inline void times(VecChar_O v, VecChar_I v1, VecChar_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5262,7 +7017,7 @@ inline void times(VecChar_O v, VecChar_I v1, VecChar_I v2)
 
 inline void divide(VecChar_O v, VecChar_I v1, VecChar_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5271,7 +7026,7 @@ inline void divide(VecChar_O v, VecChar_I v1, VecChar_I v2)
 
 inline void plus(VecInt_O v, VecInt_I v1, VecInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5280,7 +7035,7 @@ inline void plus(VecInt_O v, VecInt_I v1, VecInt_I v2)
 
 inline void minus(VecInt_O v, VecInt_I v1, VecInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5289,7 +7044,7 @@ inline void minus(VecInt_O v, VecInt_I v1, VecInt_I v2)
 
 inline void times(VecInt_O v, VecInt_I v1, VecInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5298,7 +7053,7 @@ inline void times(VecInt_O v, VecInt_I v1, VecInt_I v2)
 
 inline void divide(VecInt_O v, VecInt_I v1, VecInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5307,7 +7062,7 @@ inline void divide(VecInt_O v, VecInt_I v1, VecInt_I v2)
 
 inline void plus(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5316,7 +7071,7 @@ inline void plus(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 
 inline void minus(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5325,7 +7080,7 @@ inline void minus(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 
 inline void times(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5334,7 +7089,7 @@ inline void times(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 
 inline void divide(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5343,7 +7098,7 @@ inline void divide(VecLlong_O v, VecLlong_I v1, VecLlong_I v2)
 
 inline void plus(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5352,7 +7107,7 @@ inline void plus(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void minus(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5361,7 +7116,7 @@ inline void minus(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void times(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5370,7 +7125,7 @@ inline void times(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void divide(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5379,7 +7134,7 @@ inline void divide(VecDoub_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void plus(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5388,7 +7143,7 @@ inline void plus(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void minus(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5397,7 +7152,7 @@ inline void minus(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void times(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5406,7 +7161,7 @@ inline void times(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void divide(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5415,7 +7170,7 @@ inline void divide(VecComp_O v, VecDoub_I v1, VecDoub_I v2)
 
 inline void plus(VecComp_O v, VecComp_I v1, VecComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5424,7 +7179,7 @@ inline void plus(VecComp_O v, VecComp_I v1, VecComp_I v2)
 
 inline void minus(VecComp_O v, VecComp_I v1, VecComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5433,7 +7188,7 @@ inline void minus(VecComp_O v, VecComp_I v1, VecComp_I v2)
 
 inline void times(VecComp_O v, VecComp_I v1, VecComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5442,7 +7197,7 @@ inline void times(VecComp_O v, VecComp_I v1, VecComp_I v2)
 
 inline void divide(VecComp_O v, VecComp_I v1, VecComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5451,7 +7206,7 @@ inline void divide(VecComp_O v, VecComp_I v1, VecComp_I v2)
 
 inline void plus(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5460,7 +7215,7 @@ inline void plus(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 
 inline void minus(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5469,7 +7224,7 @@ inline void minus(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 
 inline void times(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5478,7 +7233,7 @@ inline void times(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 
 inline void divide(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5487,7 +7242,7 @@ inline void divide(CmatInt_O v, CmatInt_I v1, CmatInt_I v2)
 
 inline void plus(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5496,7 +7251,7 @@ inline void plus(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 
 inline void minus(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5505,7 +7260,7 @@ inline void minus(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 
 inline void times(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5514,7 +7269,7 @@ inline void times(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 
 inline void divide(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5523,7 +7278,7 @@ inline void divide(CmatLlong_O v, CmatLlong_I v1, CmatLlong_I v2)
 
 inline void plus(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5532,7 +7287,7 @@ inline void plus(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void minus(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5541,7 +7296,7 @@ inline void minus(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void times(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5550,7 +7305,7 @@ inline void times(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void divide(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5559,7 +7314,7 @@ inline void divide(CmatDoub_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void plus(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5568,7 +7323,7 @@ inline void plus(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void minus(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5577,7 +7332,7 @@ inline void minus(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void times(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5586,7 +7341,7 @@ inline void times(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void divide(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5595,7 +7350,7 @@ inline void divide(CmatComp_O v, CmatDoub_I v1, CmatDoub_I v2)
 
 inline void plus(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5604,7 +7359,7 @@ inline void plus(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 
 inline void minus(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5613,7 +7368,7 @@ inline void minus(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 
 inline void times(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5622,7 +7377,7 @@ inline void times(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 
 inline void divide(CmatComp_O v, CmatComp_I v1, CmatComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1) || !shape_cmp(v, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -5663,7 +7418,7 @@ inline void minus_vv(Comp *v, const Comp *v1, Long_I N)
 
 inline void minus(VecInt_O v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5672,7 +7427,7 @@ inline void minus(VecInt_O v, VecInt_I v1)
 
 inline void minus(VecLlong_O v, VecLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5681,7 +7436,7 @@ inline void minus(VecLlong_O v, VecLlong_I v1)
 
 inline void minus(VecDoub_O v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5690,7 +7445,7 @@ inline void minus(VecDoub_O v, VecDoub_I v1)
 
 inline void minus(VecComp_O v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5699,7 +7454,7 @@ inline void minus(VecComp_O v, VecDoub_I v1)
 
 inline void minus(VecComp_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5708,7 +7463,7 @@ inline void minus(VecComp_O v, VecComp_I v1)
 
 inline void minus(ScmatDoub_O v, CmatDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5871,7 +7626,7 @@ inline void pow_vvs(Comp *v, const Comp *v1, Comp_I s, Long_I N)
 
 inline void pow(VecLlong_O v, VecLlong_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5880,7 +7635,7 @@ inline void pow(VecLlong_O v, VecLlong_I v1, Llong_I s)
 
 inline void pow(VecDoub_O v, VecDoub_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5889,7 +7644,7 @@ inline void pow(VecDoub_O v, VecDoub_I v1, Int_I s)
 
 inline void pow(VecDoub_O v, VecDoub_I v1, Llong_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5898,7 +7653,7 @@ inline void pow(VecDoub_O v, VecDoub_I v1, Llong_I s)
 
 inline void pow(VecDoub_O v, VecDoub_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5907,7 +7662,7 @@ inline void pow(VecDoub_O v, VecDoub_I v1, Doub_I s)
 
 inline void pow(VecComp_O v, VecComp_I v1, Int_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5916,7 +7671,7 @@ inline void pow(VecComp_O v, VecComp_I v1, Int_I s)
 
 inline void pow(VecComp_O v, VecComp_I v1, Doub_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -5925,7 +7680,7 @@ inline void pow(VecComp_O v, VecComp_I v1, Doub_I s)
 
 inline void pow(VecComp_O v, VecComp_I v1, Comp_I s)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -6080,7 +7835,7 @@ inline Comp dot_vv(const Comp *v1, const Comp *v2, Long_I N)
 
 inline Llong dot(VecLlong_I v1, VecLlong_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6089,7 +7844,7 @@ inline Llong dot(VecLlong_I v1, VecLlong_I v2)
 
 inline Doub dot(VecDoub_I v1, VecChar_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6098,34 +7853,7 @@ inline Doub dot(VecDoub_I v1, VecChar_I v2)
 
 inline Doub dot(VecDoub_I v1, VecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
-    if (!shape_cmp(v1, v2))
-        SLS_ERR("wrong shape!");
-#endif
-    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
-}
-
-inline Comp dot(VecComp_I v1, VecDoub_I v2)
-{
-#ifdef SLS_CHECK_SHAPE
-    if (!shape_cmp(v1, v2))
-        SLS_ERR("wrong shape!");
-#endif
-    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
-}
-
-inline Comp dot(VecComp_I v1, VecComp_I v2)
-{
-#ifdef SLS_CHECK_SHAPE
-    if (!shape_cmp(v1, v2))
-        SLS_ERR("wrong shape!");
-#endif
-    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
-}
-
-inline Comp dot(SvecComp_I v1, VecComp_I v2)
-{
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6134,7 +7862,34 @@ inline Comp dot(SvecComp_I v1, VecComp_I v2)
 
 inline Comp dot(VecDoub_I v1, SvecComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
+    if (!shape_cmp(v1, v2))
+        SLS_ERR("wrong shape!");
+#endif
+    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
+}
+
+inline Comp dot(VecComp_I v1, VecDoub_I v2)
+{
+#ifdef SLS_CHECK_SHAPES
+    if (!shape_cmp(v1, v2))
+        SLS_ERR("wrong shape!");
+#endif
+    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
+}
+
+inline Comp dot(VecComp_I v1, VecComp_I v2)
+{
+#ifdef SLS_CHECK_SHAPES
+    if (!shape_cmp(v1, v2))
+        SLS_ERR("wrong shape!");
+#endif
+    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
+}
+
+inline Doub dot(SvecDoub_I v1, SvecDoub_I v2)
+{
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6143,7 +7898,16 @@ inline Comp dot(VecDoub_I v1, SvecComp_I v2)
 
 inline Comp dot(SvecDoub_I v1, SvecComp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
+    if (!shape_cmp(v1, v2))
+        SLS_ERR("wrong shape!");
+#endif
+    return dot_vv(v1.ptr(), v2.ptr(), v2.size());
+}
+
+inline Comp dot(SvecComp_I v1, VecComp_I v2)
+{
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6152,7 +7916,7 @@ inline Comp dot(SvecDoub_I v1, SvecComp_I v2)
 
 inline Comp dot(DvecComp_I v1, SvecDoub_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6164,7 +7928,7 @@ inline Comp dot(DvecComp_I v1, SvecDoub_I v2)
 
 inline Comp dot(Cmat3Comp_I v1, Cmat3Comp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6173,7 +7937,7 @@ inline Comp dot(Cmat3Comp_I v1, Cmat3Comp_I v2)
 
 inline Comp dot(Cmat3Comp_I v1, Jcmat3Comp_I v2)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v1, v2))
         SLS_ERR("wrong shape!");
 #endif
@@ -6229,7 +7993,7 @@ inline void cumsum_vv(Doub *v, const Doub *v1, Long_I N)
 
 inline void cumsum(VecInt_O v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("illegal shape!");
 #endif
@@ -6238,7 +8002,7 @@ inline void cumsum(VecInt_O v, VecInt_I v1)
 
 inline void cumsum(VecLlong_O v, VecInt_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("illegal shape!");
 #endif
@@ -6247,7 +8011,7 @@ inline void cumsum(VecLlong_O v, VecInt_I v1)
 
 inline void cumsum(VecLlong_O v, VecLlong_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("illegal shape!");
 #endif
@@ -6256,7 +8020,7 @@ inline void cumsum(VecLlong_O v, VecLlong_I v1)
 
 inline void cumsum(VecDoub_O v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("illegal shape!");
 #endif
@@ -6267,7 +8031,7 @@ inline void cumsum(VecDoub_O v, VecDoub_I v1)
 inline void mul(VecDoub_O y, CmatDoub_I a, VecDoub_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6281,7 +8045,7 @@ inline void mul(VecDoub_O y, CmatDoub_I a, VecDoub_I x)
 inline void mul(VecInt_O y, CmatInt_I a, VecInt_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6295,7 +8059,7 @@ inline void mul(VecInt_O y, CmatInt_I a, VecInt_I x)
 inline void mul(VecComp_O y, CmatComp_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6309,7 +8073,7 @@ inline void mul(VecComp_O y, CmatComp_I a, VecComp_I x)
 inline void mul(VecComp_O y, CmatDoub_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6323,7 +8087,7 @@ inline void mul(VecComp_O y, CmatDoub_I a, VecComp_I x)
 inline void mul(DvecComp_O y, DcmatDoub_I a, DvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6337,7 +8101,7 @@ inline void mul(DvecComp_O y, DcmatDoub_I a, DvecComp_I x)
 inline void mul(SvecComp_O y, ScmatDoub_I a, SvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6351,7 +8115,7 @@ inline void mul(SvecComp_O y, ScmatDoub_I a, SvecComp_I x)
 inline void mul(SvecComp_O y, ScmatDoub_I a, DvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6365,7 +8129,7 @@ inline void mul(SvecComp_O y, ScmatDoub_I a, DvecComp_I x)
 inline void mul(DvecComp_O y, CmatDoub_I a, DvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6379,7 +8143,7 @@ inline void mul(DvecComp_O y, CmatDoub_I a, DvecComp_I x)
 inline void mul(DvecComp_O y, ScmatDoub_I a, SvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6393,7 +8157,7 @@ inline void mul(DvecComp_O y, ScmatDoub_I a, SvecComp_I x)
 inline void mul(VecComp_O y, MatComp_I a, VecDoub_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6407,7 +8171,7 @@ inline void mul(VecComp_O y, MatComp_I a, VecDoub_I x)
 inline void mul(VecComp_O y, MatComp_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6421,7 +8185,7 @@ inline void mul(VecComp_O y, MatComp_I a, VecComp_I x)
 inline void mul(VecComp_O y, CmatImag_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6435,7 +8199,7 @@ inline void mul(VecComp_O y, CmatImag_I a, VecComp_I x)
 inline void mul(VecComp_O y, MatDoub_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6449,7 +8213,7 @@ inline void mul(VecComp_O y, MatDoub_I a, VecComp_I x)
 inline void mul(VecComp_O y, ScmatDoub_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6463,7 +8227,7 @@ inline void mul(VecComp_O y, ScmatDoub_I a, VecComp_I x)
 inline void mul(SvecComp_O y, MatDoub_I a, VecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6477,7 +8241,7 @@ inline void mul(SvecComp_O y, MatDoub_I a, VecComp_I x)
 inline void mul(SvecComp_O y, ScmatComp_I a, SvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6491,7 +8255,7 @@ inline void mul(SvecComp_O y, ScmatComp_I a, SvecComp_I x)
 inline void mul(SvecComp_O y, ScmatComp_I a, DvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6505,7 +8269,7 @@ inline void mul(SvecComp_O y, ScmatComp_I a, DvecComp_I x)
 inline void mul(SvecComp_O y, DcmatComp_I a, SvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6519,7 +8283,7 @@ inline void mul(SvecComp_O y, DcmatComp_I a, SvecComp_I x)
 inline void mul(SvecComp_O y, DcmatDoub_I a, SvecComp_I x)
 {
     Long Nr = a.n1(), Nc = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (Nc != x.size() || y.size() != Nr)
         SLS_ERR("illegal shape!");
 #endif
@@ -6534,7 +8298,7 @@ inline void mul(SvecComp_O y, DcmatDoub_I a, SvecComp_I x)
 inline void mul(VecDoub_O &y, VecDoub_I x, MatDoub_I a)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n1() || y.size() != Nc_a)
         SLS_ERR("illegal shape!");
 #endif
@@ -6548,7 +8312,7 @@ inline void mul(VecDoub_O &y, VecDoub_I x, MatDoub_I a)
 inline void mul(VecComp_O &y, VecDoub_I x, MatComp_I a)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n1() || y.size() != Nc_a)
         SLS_ERR("illegal shape!");
 #endif
@@ -6562,7 +8326,7 @@ inline void mul(VecComp_O &y, VecDoub_I x, MatComp_I a)
 inline void mul(VecComp_O &y, VecComp_I x, MatComp_I a)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n1() || y.size() != Nc_a)
         SLS_ERR("illegal shape!");
 #endif
@@ -6577,7 +8341,7 @@ inline void mul(VecComp_O &y, VecComp_I x, MatComp_I a)
 inline void mul(CmatDoub_O y, CmatDoub_I a, CmatDoub_I x)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2(), Nc_x = x.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != Nr_a || y.n2() != Nc_x)
         SLS_ERR("illegal shape!");
 #endif
@@ -6593,7 +8357,7 @@ inline void mul(CmatDoub_O y, CmatDoub_I a, CmatDoub_I x)
 inline void mul(CmatComp_O y, CmatComp_I a, CmatDoub_I x)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2(), Nc_x = x.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != Nr_a || y.n2() != Nc_x)
         SLS_ERR("illegal shape!");
 #endif
@@ -6609,7 +8373,7 @@ inline void mul(CmatComp_O y, CmatComp_I a, CmatDoub_I x)
 inline void mul(CmatComp_O y, CmatComp_I a, CmatComp_I x)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2(), Nc_x = x.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != Nr_a || y.n2() != Nc_x)
         SLS_ERR("illegal shape!");
 #endif
@@ -6625,7 +8389,7 @@ inline void mul(CmatComp_O y, CmatComp_I a, CmatComp_I x)
 inline void mul(CmatComp_O y, CmatComp_I a, MatComp_I x)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2(), Nc_x = x.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != Nr_a || y.n2() != Nc_x)
         SLS_ERR("illegal shape!");
 #endif
@@ -6641,7 +8405,7 @@ inline void mul(CmatComp_O y, CmatComp_I a, MatComp_I x)
 inline void mul(ScmatComp_O y, ScmatDoub_I a, CmatComp_I x)
 {
     Long Nr_a = a.n1(), Nc_a = a.n2(), Nc_x = x.n2();
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != Nr_a || y.n2() != Nc_x)
         SLS_ERR("illegal shape!");
 #endif
@@ -6658,7 +8422,7 @@ inline void mul(ScmatComp_O y, ScmatDoub_I a, CmatComp_I x)
 // matrix-vector multiplication
 inline void mul_gen(VecDoub_O &y, CmatDoub_I a, VecDoub_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6678,7 +8442,7 @@ inline void mul_gen(VecDoub_O &y, CmatDoub_I a, VecDoub_I x, Doub_I alpha = 1, D
 
 inline void mul_gen(VecComp_O &y, CmatDoub_I a, VecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6702,7 +8466,7 @@ inline void mul_gen(VecComp_O &y, CmatDoub_I a, VecComp_I x, Doub_I alpha = 1, D
 
 inline void mul_gen(VecComp_O &y, ScmatDoub_I a, VecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6726,7 +8490,7 @@ inline void mul_gen(VecComp_O &y, ScmatDoub_I a, VecComp_I x, Doub_I alpha = 1, 
 
 inline void mul_gen(DvecComp_O &y, DcmatDoub_I a, DvecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6750,7 +8514,7 @@ inline void mul_gen(DvecComp_O &y, DcmatDoub_I a, DvecComp_I x, Doub_I alpha = 1
 
 inline void mul_gen(DvecComp_O &y, CmatDoub_I a, DvecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6774,7 +8538,7 @@ inline void mul_gen(DvecComp_O &y, CmatDoub_I a, DvecComp_I x, Doub_I alpha = 1,
 
 inline void mul_gen(SvecComp_O &y, ScmatDoub_I a, SvecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6798,7 +8562,7 @@ inline void mul_gen(SvecComp_O &y, ScmatDoub_I a, SvecComp_I x, Doub_I alpha = 1
 
 inline void mul_gen(SvecComp_O &y, ScmatComp_I a, SvecComp_I x, Comp_I alpha = 1, Comp_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6818,7 +8582,7 @@ inline void mul_gen(SvecComp_O &y, ScmatComp_I a, SvecComp_I x, Comp_I alpha = 1
 
 inline void mul_gen(SvecComp_O &y, ScmatComp_I a, DvecComp_I x, Comp_I alpha = 1, Comp_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6838,7 +8602,7 @@ inline void mul_gen(SvecComp_O &y, ScmatComp_I a, DvecComp_I x, Comp_I alpha = 1
 
 inline void mul_gen(SvecComp_O &y, DcmatDoub_I a, SvecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6862,7 +8626,7 @@ inline void mul_gen(SvecComp_O &y, DcmatDoub_I a, SvecComp_I x, Doub_I alpha = 1
 
 inline void mul_gen(SvecComp_O &y, ScmatDoub_I a, DvecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6886,7 +8650,7 @@ inline void mul_gen(SvecComp_O &y, ScmatDoub_I a, DvecComp_I x, Doub_I alpha = 1
 
 inline void mul_gen(DvecComp_O &y, ScmatDoub_I a, SvecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1())
         SLS_ERR("wrong shape!");
 #endif
@@ -6911,7 +8675,7 @@ inline void mul_gen(DvecComp_O &y, ScmatDoub_I a, SvecComp_I x, Doub_I alpha = 1
 
 inline void mul_sym(VecDoub_O &y, CmatDoub_I a, VecDoub_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1() || x.size() != y.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -6931,7 +8695,7 @@ inline void mul_sym(VecDoub_O &y, CmatDoub_I a, VecDoub_I x, Doub_I alpha = 1, D
 
 inline void mul_sym(VecComp_O &y, CmatDoub_I a, VecComp_I x, Doub_I alpha = 1, Doub_I beta = 0)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (x.size() != a.n2() || y.size() != a.n1() || x.size() != y.size())
         SLS_ERR("wrong shape!");
 #endif
@@ -6956,7 +8720,7 @@ inline void mul_sym(VecComp_O &y, CmatDoub_I a, VecComp_I x, Doub_I alpha = 1, D
 
 inline void mul_gen(CmatDoub_O y, CmatDoub_I a, CmatDoub_I &x)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != a.n1() || y.n2() != x.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -6969,7 +8733,7 @@ inline void mul_gen(CmatDoub_O y, CmatDoub_I a, CmatDoub_I &x)
 
 inline void mul_gen(CmatComp_O y, CmatComp_I a, CmatDoub_I &x)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != a.n1() || y.n2() != x.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -6983,7 +8747,7 @@ inline void mul_gen(CmatComp_O y, CmatComp_I a, CmatDoub_I &x)
 
 inline void mul_gen(CmatComp_O y, CmatComp_I a, CmatComp_I &x)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != a.n1() || y.n2() != x.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -6997,7 +8761,7 @@ inline void mul_gen(CmatComp_O y, CmatComp_I a, CmatComp_I &x)
 
 inline void mul_gen(ScmatComp_O y, ScmatDoub_I a, CmatComp_I &x)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (a.n2() != x.n1() || y.n1() != a.n1() || y.n2() != x.n2())
         SLS_ERR("illegal shape!");
 #endif
@@ -7247,7 +9011,7 @@ inline void exp(VecComp_IO v)
 
 inline void exp(VecDoub_O v, VecDoub_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif
@@ -7256,7 +9020,7 @@ inline void exp(VecDoub_O v, VecDoub_I v1)
 
 inline void exp(VecComp_O v, VecComp_I v1)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(v, v1))
         SLS_ERR("wrong size!");
 #endif

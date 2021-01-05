@@ -49,7 +49,7 @@ inline void nband(Long_O Nup, Long_O Nlow, CmatDoub_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nup = a.n2() - 1;
+        Nup = 0;
     
     // check lower diagonals
     found = false;
@@ -64,7 +64,7 @@ inline void nband(Long_O Nup, Long_O Nlow, CmatDoub_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nlow = a.n1() - 1;
+        Nlow = 0;
 }
 
 inline void nband(Long_O Nup, Long_O Nlow, CmatComp_I a, Doub_I tol = 0)
@@ -82,7 +82,7 @@ inline void nband(Long_O Nup, Long_O Nlow, CmatComp_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nup = a.n2() - 1;
+        Nup = 0;
     
     // check lower diagonals
     found = false;
@@ -97,7 +97,7 @@ inline void nband(Long_O Nup, Long_O Nlow, CmatComp_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nlow = a.n1() - 1;
+        Nlow = 0;
 }
 
 inline void nband(Long_O Nup, Long_O Nlow, ScmatDoub_I a, Doub_I tol = 0)
@@ -115,7 +115,7 @@ inline void nband(Long_O Nup, Long_O Nlow, ScmatDoub_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nup = a.n2() - 1;
+        Nup = 0;
     
     // check lower diagonals
     found = false;
@@ -130,7 +130,7 @@ inline void nband(Long_O Nup, Long_O Nlow, ScmatDoub_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nlow = a.n1() - 1;
+        Nlow = 0;
 }
 
 inline void nband(Long_O Nup, Long_O Nlow, ScmatComp_I a, Doub_I tol = 0)
@@ -148,7 +148,7 @@ inline void nband(Long_O Nup, Long_O Nlow, ScmatComp_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nup = a.n2() - 1;
+        Nup = 0;
     
     // check lower diagonals
     found = false;
@@ -163,7 +163,7 @@ inline void nband(Long_O Nup, Long_O Nlow, ScmatComp_I a, Doub_I tol = 0)
         }
     }
     if (!found)
-        Nlow = a.n1() - 1;
+        Nlow = 0;
 }
 
 
@@ -193,7 +193,7 @@ inline void copy_diag_real(CbandComp_O b, Doub_I s)
 // copy double dense matrix to imag part of band matrix
 inline void copy_imag(CbandComp_O b, ScmatDoub_I a)
 {
-    #ifdef SLS_CHECK_SHAPE
+    #ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(a, b))
         SLS_ERR("wrong shape!");
     #endif
@@ -212,7 +212,7 @@ inline void copy_imag(CbandComp_O b, ScmatDoub_I a)
 // B = 1/2 + I*dt*A/4
 inline void cn_band_mat(CbandComp_O b, ScmatDoub_I a, Doub_I dt)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(a, b))
         SLS_ERR("wrong shape!");
 #endif
@@ -236,7 +236,7 @@ inline void cn_band_mat(CbandComp_O b, ScmatDoub_I a, Doub_I dt)
 // B = 1/2 + dt*A/4
 inline void cn_band_mat_imag_time(CbandComp_O b, ScmatDoub_I a, Doub_I dt)
 {
-#ifdef SLS_CHECK_SHAPE
+#ifdef SLS_CHECK_SHAPES
     if (!shape_cmp(a, b))
         SLS_ERR("wrong shape!");
 #endif

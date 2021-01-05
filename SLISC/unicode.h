@@ -3,16 +3,18 @@
 #include <sstream>
 #include <fstream>
 #include <locale>
+#include <codecvt>
 #ifdef _MSC_VER
 #include <Windows.h> // for console unicode output
 #undef max
 #undef min
 #endif
 #include "string.h"
-#include "file.h"
 #include "utfcpp/utf8.h"
 
+#ifdef _MSC_VER
 #define SLS_USE_UTFCPP
+#endif
 
 namespace slisc {
 
@@ -20,8 +22,8 @@ using std::stringstream;
 
 inline Long CRLF_to_LF(Str32_IO str);
 
-// set windows console to display utf-8
 #ifdef _MSC_VER
+// set windows console to display utf-8
 struct set_windows_console_utf8 {
     set_windows_console_utf8() {
         SetConsoleOutputCP(65001); // code page 65001 is UTF-8
@@ -29,6 +31,26 @@ struct set_windows_console_utf8 {
 };
 // in case of ODR error, put this in main function;
 set_windows_console_utf8 yes_set_windows_console_utf8;
+
+// Convert a wide Unicode wstring to an UTF8 string
+inline Str wstr2utf8(const std::wstring& wstr)
+{
+    if (wstr.empty()) return std::string();
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
+    std::string strTo(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &strTo[0], size_needed, NULL, NULL);
+    return strTo;
+}
+
+// Convert an UTF8 string to a wide Unicode wstring
+inline std::wstring utf82wstr(Str_I str)
+{
+    if (str.empty()) return std::wstring();
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+    std::wstring wstrTo(size_needed, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+    return wstrTo;
+}
 #endif
 
 #ifdef SLS_USE_UTFCPP
@@ -45,6 +67,29 @@ inline void utf32to8(Str_O str, Str32_I str32)
     str.clear();
     utf8::utf32to8(str32.begin(), str32.end(), back_inserter(str));
 }
+
+inline void utf8to16(Str_O str16, Str_I str)
+{
+    str16.clear();
+    utf8::utf8to16(str.begin(), str.end(), back_inserter(str16));
+}
+
+inline void utf16to8(Str_O str, Str_I str16)
+{
+    str.clear();
+    utf8::utf16to8(str16.begin(), str16.end(), back_inserter(str));
+}
+
+inline void utf16to32(Str32_O str32, Str_I str16)
+{
+    Str str8; utf16to8(str8, str16); utf8to32(str32, str8);
+}
+
+inline void utf32to16(Str_O str16, Str32_I str32)
+{
+    Str str8; utf32to8(str8, str32); utf8to16(str16, str8);
+}
+
 #else
 // convert from UTF-8 Str to UTF-32 Str32
 inline void utf8to32(Str32_O str32, Str_I str)
@@ -77,6 +122,35 @@ inline Str utf32to8(Str32_I str32)
     return str;
 }
 
+inline Str utf8to16(Str_I str)
+{
+    Str str16;
+    utf8to16(str16, str);
+    return str16;
+}
+
+// convert from UTF-32 Str32 to UTF-8 Str
+inline Str utf16to8(Str_I str16)
+{
+    Str str;
+    utf16to8(str, str16);
+    return str;
+}
+
+inline Str32 utf16to32(Str_I str)
+{
+    Str32 str32;
+    utf16to32(str32, str);
+    return str32;
+}
+
+inline Str utf32to16(Str32_I str32)
+{
+    Str str;
+    utf32to16(str, str32);
+    return str;
+}
+
 // display Str32
 inline std::ostream &operator<<(std::ostream &out, Str32_I str32)
 {
@@ -95,11 +169,6 @@ inline Str32 operator+(Str32_I str32, Str_I str)
 inline Str32 operator+(Str_I str, Str32_I str32)
 {
     return utf8to32(str) + str32;
-}
-
-// not case sensitive on Windows, see file_exist_case()
-inline Bool file_exist(Str32_I fname) {
-    return file_exist(utf32to8(fname));
 }
 
 // read a line from a string, from str[start] to 1 char before '\n'
@@ -123,63 +192,6 @@ inline Long skip_line(Str32_I &str, Long_I start = 0)
     if (ind < 0 || ind == size(str) - 1)
         return -1;
     return ind + 1;
-}
-
-// read a UTF-8 file into UTF-32 Str32
-inline void read(Str32_O str32, Str_I fname)
-{
-    Str str;
-    read(str, fname);
-    utf8to32(str32, str);
-}
-
-inline void read(Str32_O str32, Str32_I fname)
-{
-    read(str32, utf32to8(fname));
-}
-
-// write UTF-32 Str32 into a UTF-8 file
-inline void write(Str32_I str32, Str_I fname)
-{
-    Str str;
-    utf32to8(str, str32);
-    write(str, fname);
-}
-
-inline void write(Str32_I str32, Str32_I fname)
-{
-    write(str32, utf32to8(fname));
-}
-
-// write a vector of strings to file
-// no `\n` allowed in each string
-// file will be ended by a return
-inline void write_vec_str(vecStr32_I vec_str, Str32_I fname)
-{
-    Str32 str;
-    for (Long i = 0; i < size(vec_str); ++i) {
-        str += vec_str[i] + U'\n';
-    }
-    write(str, fname);
-}
-
-// read the file written by `write_vec_str()`
-// file must be ended by a return
-inline void read_vec_str(vecStr32_O vec_str, Str32_I fname)
-{
-    Str32 str;
-    vec_str.clear();
-    read(str, fname);
-    CRLF_to_LF(str);
-    Long ind0 = 0;
-    for (Long i = 0; ; ++i) {
-        vec_str.emplace_back();
-        ind0 = get_line(vec_str[i], str, ind0);
-        if (ind0 < 0)
-            break;
-    }
-    if (vec_str.back().empty())
-        vec_str.pop_back();
 }
 
 inline void num2str(Str32_O str, Char_I num)
@@ -332,14 +344,18 @@ inline Long rfind(vecLong_O ikey, Str32_I str, vecStr32_I key, Long_I start)
 // return the index after the key found, return -1 if nothing found.
 inline Long expect(Str32_I str, Str32_I key, Long_I start)
 {
+#ifdef SLS_CHECK_BOUNDS
+    if (start < 0 || start >= size(str))
+        throw Str32(U"内部错误： expect(): out of bound");
+#endif
     Long ind = start;
     Long ind0 = 0;
     Long L = str.size();
     Long L0 = key.size();
     Char32 c0, c;
     while (true) {
-         c0 = key.at(ind0);
-         c = str.at(ind);
+         c0 = key[ind0];
+         c = str[ind];
          if (c == c0) {
              ++ind0;
              if (ind0 == L0)
@@ -409,6 +425,14 @@ inline Bool is_num(Char32_I c)
     return false;
 }
 
+// check if a character is an ascii character (a-z, A-Z, 0-9)
+inline Bool is_ascii(Char32_I c)
+{
+    if (c > 0 && c < 128)
+        return true;
+    return false;
+}
+
 // check if a character is alphanumeric (a-z, A-Z, 0-9)
 inline Bool is_alphanum(Char32_I c)
 {
@@ -454,20 +478,35 @@ inline Long find_whole_word(Str32_I str, Str32_I key, Long_I start)
     }
 }
 
-// replace all occurance of "key" with "new_str"
+// replace all occurance of "key" with "new_key"
 // return the number of keys replaced
-inline Long replace(Str32_IO str, Str32_I key, Str32_I new_str)
+// works with utf-8
+inline Long replace(Str32_IO str, Str32_I key, Str32_I new_key)
 {
-    Long ind0 = 0;
-    Long Nkey = key.size();
-    Long N = 0;
+    Long ind0 = 0, N = 0, Nkey = key.size();
     while (true) {
          ind0 = str.find(key, ind0);
         if (ind0 < 0) break;
-        str.erase(ind0, Nkey);
-        str.insert(ind0, new_str);
-        ++N; ind0 += new_str.size();
+        str.replace(ind0, Nkey, new_key);
+        ++N; ind0 += new_key.size();
     }
+    return N;
+}
+
+// replace to new string
+inline Long replace(Str32_O str1, Str32_I str, Str32_I key, Str32_I new_key)
+{
+    Long ind0 = 0, N = 0, Nkey = key.size();
+    str1.clear();
+    while (true) {
+        Long ind1 = str.find(key, ind0);
+        if (ind1 < 0) break;
+        str1 += str.substr(ind0, ind1-ind0) + new_key;
+        ind0 = ind1 + Nkey;
+        ++N;
+    }
+    if (ind0 < size(str))
+        str1 += str.substr(ind0);
     return N;
 }
 
@@ -687,33 +726,6 @@ inline Long MatchBraces(vecLong_O ind_left, vecLong_O ind_right,
     return Nleft;
 }
 
-// UTF-32 version of file_list() in file.h
-inline void file_list(vecStr32_O fnames, Str32_I path, Bool_I append = false)
-{
-    vecStr fnames8;
-    if (!append)
-        fnames.resize(0);
-    file_list(fnames8, utf32to8(path), append);
-    for (Long i = 0; i < size(fnames8); ++i)
-        fnames.push_back(utf8to32(fnames8[i]));
-}
-
-// list all files in current directory, with a given extension
-inline void file_list_ext(vecStr32_O fnames, Str32_I path, Str32_I ext, Bool_I keep_ext = true, Bool_I append = false)
-{
-    vecStr fnames8;
-    if (!append)
-        fnames.resize(0);
-    file_list_ext(fnames8, utf32to8(path), utf32to8(ext), keep_ext, append);
-    for (Long i = 0; i < size(fnames8); ++i)
-        fnames.push_back(utf8to32(fnames8[i]));
-}
-
-inline void file_copy(Str32_I fname_out, Str32_I fname_in, Bool_I replace)
-{
-    file_copy(utf32to8(fname_out), utf32to8(fname_in), replace);
-}
-
 // check if is a chinese character
 // does not include punctuations
 // reference: https://stackoverflow.com/questions/1366068/whats-the-complete-range-for-chinese-characters-in-unicode
@@ -726,12 +738,6 @@ inline Bool is_chinese(Char32_I c)
         (c >= U'\uF900' && c <= U'\uFAAD'))
         return true;
     return false;
-}
-
-inline void last_modified(Str32_O yyyymmddhhmmss, Str32_I fname) {
-    Str str;
-    last_modified(str, utf32to8(fname));
-    yyyymmddhhmmss = utf8to32(str);
 }
 
 } // namespace slisc
