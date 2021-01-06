@@ -13,6 +13,7 @@ Int main(Int argc, Char *argv[])
 	vecStr fnames, sha1s; // file names and sha1 sums
 	VecLong sizes; // file size in bytes
 	VecBool exist; // does file exist? (might be deleted)
+	Bool auto_skip = false; // auto skip (intended to be used with auto delete)
 	
 	for (Long i = 1; i < argc; ++i)
 		file_list_r(fnames, argv[i], true);
@@ -110,8 +111,10 @@ Int main(Int argc, Char *argv[])
 			// user action
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
-			cout << "[1/2/b(both)/i(ignore this sha1sum)/s(skip 1st)/<enter> (skip 2nd)/id=...(ignore dir)/ad=...(auto delete dir)]: "; cout.flush();
-			getline(cin, select);
+			if (auto_skip)
+				break;
+			cout << "[1/2/b(both)/i(ignore this sha1sum)/s(skip 1st)/as(auto skip)/<enter> (skip 2nd)/id=...(ignore dir)/ad=...(auto delete dir)]: "; cout.flush();
+			getline(cin, select);			
 			cout << "-----------------------------------------------" << endl;
 			if (select == "1") {
 				dest = path_recyc + fnames[i];
@@ -140,6 +143,14 @@ Int main(Int argc, Char *argv[])
 				break;
 			}
 			else if (select == "s") {
+				break;
+			}
+			else if (select == "as") {
+				if (auto_del_dirs.empty()) {
+					cout << "please set auto-delete before using auto skip" << endl;
+					--j;
+				}
+				auto_skip = true;
 				break;
 			}
 			else if (select == "i") {
