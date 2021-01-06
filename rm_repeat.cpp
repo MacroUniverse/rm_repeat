@@ -123,7 +123,7 @@ Int main(Int argc, Char *argv[])
 				cout << "auto delete: " << fnames[j] << endl;
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
-				if (file_exist(fnames[i]))
+				if (file_exist(fnames[j]))
 					file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 				continue;
@@ -148,7 +148,7 @@ Int main(Int argc, Char *argv[])
 			else if (select == "2") {
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
-				if (file_exist(fnames[i]))
+				if (file_exist(fnames[j]))
 					file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 			}
@@ -162,7 +162,7 @@ Int main(Int argc, Char *argv[])
 				// 2
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
-				if (file_exist(fnames[i]))
+				if (file_exist(fnames[j]))
 					file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 				break;
