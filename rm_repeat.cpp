@@ -104,7 +104,7 @@ Int main(Int argc, Char *argv[])
 				|| search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
 			continue;
 		for (Long j = i+1; j < N; ++j) {
-			if (sha1s[j] != sha1s[i] || search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
+			if (sha1s[j] != sha1s[i] || search_head(ignor_dirs, path2dir(fnames[j])) >= 0)
 				continue;
 			
 			// auto delete (only if one of them is in auto_del_dirs[])
