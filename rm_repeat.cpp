@@ -18,6 +18,7 @@ Int main(Int argc, Char *argv[])
 	Bool auto_skip = false; // auto skip (intended to be used with auto delete)
 	Str path_recyc = "./rm_repeat_recycle/"; // recycle folder
 	Bool resume = file_exist(path_recyc + "data.matb"); // if rm_repeat_recycle/data.matb exist, then load data from it.
+	Bool ignore_size0 = true; // ignore files with 0 size
 	
 	if (resume) {
 		cout << "resuming from previous data..." << endl;
@@ -30,8 +31,12 @@ Int main(Int argc, Char *argv[])
 		exist.resize(N); copy(exist, true);
 	}
 	else {
-		for (Long i = 1; i < argc; ++i)
-		file_list_r(fnames, argv[i], true);
+		Long istart = 1;
+		if (Str(argv[1]) == "-d0") {
+			ignore_size0 = false; ++istart;
+		}
+		for (Long i = istart; i < argc; ++i)
+			file_list_r(fnames, argv[i], true);
 
 		N = fnames.size();
 		sizes.resize(N); sha1s.resize(N); exist.resize(N);
@@ -54,7 +59,7 @@ Int main(Int argc, Char *argv[])
 		Long sha1count = 0;
 		cout << "\n\nchecksum...\n==============================================================" << endl;
 		for (Long i = 0; i < N; ++i) {
-			if (sizes[i] <= 0)
+			if (ignore_size0 && sizes[i] <= 0)
 				continue;
 			for (Long j = i+1; j < N; ++j) {
 				if (sizes[j] != sizes[i])
@@ -81,7 +86,7 @@ Int main(Int argc, Char *argv[])
 			cout << "\nthe following files cannot be opened (ignored)" << endl;
 			cout << "===============================================" << endl;
 			for (Long i = 0; i < N; ++i) {
-				if (sizes[i] <= 0)
+				if (sizes[i] < 0)
 					cout << "ignored (cannot open): " << fnames[i] << endl;
 			}
 		}
@@ -103,12 +108,17 @@ Int main(Int argc, Char *argv[])
 		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0)
 			continue;
 		for (Long j = i+1; j < N; ++j) {
-			if (sha1s[j] != sha1s[i] || search_head(ignor_dirs, path2dir(fnames[j])) >= 0)
+			if (sha1s[j] != sha1s[i])
 				continue;
 			
 			// auto delete (only if one of them is in auto_del_dirs[])
-			Bool del1 = search_head(auto_del_dirs, path2dir(fnames[i])) >= 0;
-			Bool del2 = search_head(auto_del_dirs, path2dir(fnames[j])) >= 0;
+			Bool ad1 = search_head(auto_del_dirs, path2dir(fnames[i])) >= 0;
+			Bool ad2 = search_head(auto_del_dirs, path2dir(fnames[j])) >= 0;
+			Bool id1 = search_head(ignor_dirs, path2dir(fnames[i])) >= 0;
+			Bool id2 = search_head(ignor_dirs, path2dir(fnames[j])) >= 0;
+			Bool del1 = ad1 && !id1, del2 = ad2 && !id2;
+			if (id1 && id2)
+				continue;
 			if (del1 && !del2) {
 				cout << "auto delete: " << fnames[i] << endl;
 				dest = path_recyc + fnames[i];
