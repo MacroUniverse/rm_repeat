@@ -100,8 +100,7 @@ Int main(Int argc, Char *argv[])
 	Str select, dest, buffer; buffer.resize(1024*1024*64);
 	vecStr ignor_sha1s, ignor_dirs, auto_del_dirs;
 	for (Long i = 0; i < N; ++i) {
-		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0
-				|| search_head(ignor_dirs, path2dir(fnames[i])) >= 0)
+		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0)
 			continue;
 		for (Long j = i+1; j < N; ++j) {
 			if (sha1s[j] != sha1s[i] || search_head(ignor_dirs, path2dir(fnames[j])) >= 0)
