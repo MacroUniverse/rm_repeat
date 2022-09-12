@@ -14,7 +14,7 @@ Int main(Int argc, Char *argv[])
 		SLS_ERR("usage: rm_repeat <path1> <path2> ...");
 	vecStr fnames, sha1s; // file names and sha1 sums
 	VecLong sizes; // file size in bytes
-	VecBool exist; // does file exist? (might be deleted)
+	vecBool exist; // does file exist? (might be deleted)
 	Bool auto_skip = false; // auto skip (intended to be used with auto delete)
 	Str path_recyc = "./rm_repeat_recycle/"; // recycle folder
 	Bool resume = file_exist(path_recyc + "data.matb"); // if rm_repeat_recycle/data.matb exist, then load data from it.
@@ -25,7 +25,7 @@ Int main(Int argc, Char *argv[])
 		load_matb(sizes, "sizes", path_recyc + "data.matb");
 		read_vec_str(fnames, path_recyc + "fnames.txt");
 		read_vec_str(sha1s, path_recyc + "sha1s.txt");
-		if (size(sizes) != size(fnames) || size(fnames) != size(sha1s))
+		if (sizes.size() != size(fnames) || size(fnames) != size(sha1s))
 			SLS_ERR("cannot load data files, file might be corrupted! delete data files for a new run.");
 		N = fnames.size();
 		exist.resize(N); copy(exist, true);
@@ -102,7 +102,7 @@ Int main(Int argc, Char *argv[])
 	Long Ndelete = 0;
 	cout << "\nplease choose the files to move to \"./rm_repeat_recycle/\"..." << endl;
 	cout << "===============================================" << endl;
-	Str select, dest, buffer; buffer.resize(1024*1024*64);
+	Str select, dest;
 	vecStr ignor_sha1s, ignor_dirs, auto_del_dirs;
 	for (Long i = 0; i < N; ++i) {
 		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0)
@@ -124,7 +124,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				if (file_exist(fnames[i]))
-					file_move(dest, fnames[i], buffer);
+					file_move(dest, fnames[i]);
 				exist[i] = false; ++Ndelete;
 				break;
 			}
@@ -133,7 +133,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				if (file_exist(fnames[j]))
-					file_move(dest, fnames[j], buffer);
+					file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 				continue;
 			}
@@ -150,7 +150,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				if (file_exist(fnames[i]))
-					file_move(dest, fnames[i], buffer);
+					file_move(dest, fnames[i]);
 				exist[i] = false; ++Ndelete;
 				break;
 			}
@@ -158,7 +158,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				if (file_exist(fnames[j]))
-					file_move(dest, fnames[j], buffer);
+					file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 			}
 			else if (select == "b") {
@@ -166,13 +166,13 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				if (file_exist(fnames[i]))
-					file_move(dest, fnames[i], buffer);
+					file_move(dest, fnames[i]);
 				exist[i] = false; ++Ndelete;
 				// 2
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				if (file_exist(fnames[j]))
-					file_move(dest, fnames[j], buffer);
+					file_move(dest, fnames[j]);
 				exist[j] = false; ++Ndelete;
 				break;
 			}
