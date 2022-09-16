@@ -102,7 +102,7 @@ Int main(Int argc, Char *argv[])
 	Long Ndelete = 0;
 	cout << "\nplease choose the files to move to \"./rm_repeat_recycle/\"..." << endl;
 	cout << "===============================================" << endl;
-	Str select, dest;
+	Str select, dest, buffer; buffer.resize(1024*1024*64); // 64MB buffer
 	vecStr ignor_sha1s, ignor_dirs, auto_del_dirs;
 	for (Long i = 0; i < N; ++i) {
 		if (sha1s[i].empty() || !exist[i] || search(sha1s[i], ignor_sha1s) >= 0)
@@ -124,7 +124,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				if (file_exist(fnames[i]))
-					file_move(dest, fnames[i]);
+					file_move(dest, fnames[i], buffer);
 				exist[i] = false; ++Ndelete;
 				break;
 			}
@@ -133,7 +133,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				if (file_exist(fnames[j]))
-					file_move(dest, fnames[j]);
+					file_move(dest, fnames[j], buffer);
 				exist[j] = false; ++Ndelete;
 				continue;
 			}
@@ -150,7 +150,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				if (file_exist(fnames[i]))
-					file_move(dest, fnames[i]);
+					file_move(dest, fnames[i], buffer);
 				exist[i] = false; ++Ndelete;
 				break;
 			}
@@ -158,7 +158,7 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				if (file_exist(fnames[j]))
-					file_move(dest, fnames[j]);
+					file_move(dest, fnames[j], buffer);
 				exist[j] = false; ++Ndelete;
 			}
 			else if (select == "b") {
@@ -166,13 +166,13 @@ Int main(Int argc, Char *argv[])
 				dest = path_recyc + fnames[i];
 				ensure_dir(dest);
 				if (file_exist(fnames[i]))
-					file_move(dest, fnames[i]);
+					file_move(dest, fnames[i], buffer);
 				exist[i] = false; ++Ndelete;
 				// 2
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
 				if (file_exist(fnames[j]))
-					file_move(dest, fnames[j]);
+					file_move(dest, fnames[j], buffer);
 				exist[j] = false; ++Ndelete;
 				break;
 			}
