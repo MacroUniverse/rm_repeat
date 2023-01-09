@@ -10,6 +10,7 @@ using namespace slisc;
 Int main(Int argc, Char *argv[])
 {
 	Long N;
+	Bool del_newer = false;
 	if (argc < 2)
 		SLS_ERR("usage: rm_repeat <path1> <path2> ...");
 	vecStr fnames, sha1s; // file names and sha1 sums
@@ -128,7 +129,7 @@ Int main(Int argc, Char *argv[])
 				exist[i] = false; ++Ndelete;
 				break;
 			}
-			else if (del2) {
+			if (del2 && !del1) {
 				cout << "auto delete: " << fnames[j] << endl;
 				dest = path_recyc + fnames[j];
 				ensure_dir(dest);
@@ -138,12 +139,37 @@ Int main(Int argc, Char *argv[])
 				continue;
 			}
 
-			// user action
+			if (del1 && del2) {
+				Str mod_time_i, mod_time_j;
+				last_modified(mod_time_i, fnames[i]);
+				last_modified(mod_time_j, fnames[j]);
+                Str tmp = del_newer ? "(newer)" : "(older)";
+				if (del_newer == (mod_time_i > mod_time_j)) { 
+					cout << "auto delete " + tmp + ": " << fnames[i] << endl;
+					dest = path_recyc + fnames[i];
+					ensure_dir(dest);
+					if (file_exist(fnames[i]))
+						file_move(dest, fnames[i], buffer);
+					exist[i] = false; ++Ndelete;
+					break;
+				}
+				else {
+                    cout << "auto delete " + tmp + ": " << fnames[j] << endl;
+					dest = path_recyc + fnames[j];
+					ensure_dir(dest);
+					if (file_exist(fnames[j]))
+						file_move(dest, fnames[j], buffer);
+					exist[j] = false; ++Ndelete;
+					continue;
+				}
+			}
+
+			// ======= user action ===========
 			cout << "\n" << i+1 << "/" << N << endl;
 			cout << sha1s[i] + '\n' + fnames[i] + '\n' + fnames[j] << endl;
 			if (auto_skip)
 				break;
-			cout << "[1/2/b(both)/i(ignore this sha1sum)/s(skip 1st)/as(auto skip)/<enter> (skip 2nd)/id=...(ignore dir)/ad=...(auto delete dir)]: "; cout.flush();
+			cout << "[1/2/b(both)/i(ignore this sha1sum)/s(skip 1st)/as(auto skip)/<enter> (skip 2nd)/id=...(ignore dir)/dn(prefer newer files for auto delete)/ad=...(auto delete dir)]: "; cout.flush();
 			getline(cin, select);			
 			cout << "-----------------------------------------------" << endl;
 			if (select == "1") {
@@ -197,6 +223,11 @@ Int main(Int argc, Char *argv[])
 				ignor_dirs.push_back(select.substr(3));
 				cout << "ignored directories:" << endl;
 				disp(ignor_dirs);
+				--j;
+			}
+			else if (select == "dn") {
+				del_newer = true;
+                cout << "prefer newer files for auto delete" << endl;
 				--j;
 			}
 			else if (select.substr(0,3) == "ad=") {
