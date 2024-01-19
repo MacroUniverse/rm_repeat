@@ -7,7 +7,39 @@
 
 // check repeated files and ask if delete
 using namespace slisc;
-Int main(Int argc, Char *argv[])
+
+// TODO: use this function first before the full SHA1 hashing!!!! for performance
+// takes 100 bytes from 10 parts of the file then calculate SHA1
+// if the file size is less than 1000 bytes, calculate SHA1 for the whole file
+inline Str sha1_file_part(Str_I file)
+{
+    const Long numSegments = 10;
+    const Long segmentSize = 100;
+    const Long step = (fileSize - segmentSize) / numSegments;
+	Str segment(segmentSize), all_segments;
+
+    ifstream file(filename, std::ifstream::binary);
+    if (!file)
+        SLS_ERR("Cannot open file: " + filename);
+
+    // Determine the size of the file
+    file.seekg(0, file.end);
+    Long fileSize = file.tellg();
+    file.seekg(0, file.beg);
+
+	if (fileSize > numSegments * segmentSize)
+		return sha1sum_f(file);
+
+    // Read and print segments from the file
+    for (Long i = 0; i < numSegments; ++i) {
+        file.seekg(i * step);
+        file.read(segment.data(), segmentSize);
+		all_segments += segment.
+    }
+	return sha1sum(all_segments);
+}
+
+int main(int argc, char *argv[])
 {
 	Long N;
 	Bool del_newer = false;
