@@ -25,6 +25,7 @@
 #include <cstring>
 #include <stdint.h>
 #include "../file/file.h"
+#include "../util/linux.h"
 
 namespace slisc {
 	namespace sha1
@@ -213,12 +214,22 @@ namespace slisc {
 	}
 
 	// sha1sum for file
+	// needs RAM as large as the file!
 	inline Str sha1sum_f(Str_I fname) {
-		// if (file_size(fname) > 1000000000) { // 1GB
-		// 	exec_str
-		// }
 		static thread_local Str str;
 		read(str, fname);
 		return sha1sum(str);
 	}
+
+	// use sha1sum in the command line
+#ifdef SLS_USE_LINUX
+	inline Str sha1sum_f_exec(Str_I fname) {
+		Str stdout;
+		if (exec_str(stdout, "sha1sum \"" + fname + "\";"))
+			SLS_ERR("exec_str returned none-zero!");
+		if (stdout.size() <= 41)
+			SLS_ERR("exec_str() illegal output: " + stdout);
+		return stdout.substr(0, 40);
+	}
+#endif
 } // namespace slisc

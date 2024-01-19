@@ -1,9 +1,9 @@
-#include "SLISC/sha1sum.h"
-#include "SLISC/arithmetic.h"
-#include "SLISC/search.h"
-#include "SLISC/input.h"
-#include "SLISC/disp.h"
-#include "SLISC/matb.h"
+#include "SLISC/util/sha1sum.h"
+// #include "SLISC/arithmetic.h"
+#include "SLISC/algo/search.h"
+#include "SLISC/util/input.h"
+#include "SLISC/str/disp.h"
+#include "SLISC/file/matb.h"
 
 // check repeated files and ask if delete
 using namespace slisc;
@@ -15,26 +15,26 @@ inline Str sha1_file_part(Str_I file)
 {
     const Long numSegments = 10;
     const Long segmentSize = 100;
-    const Long step = (fileSize - segmentSize) / numSegments;
-	Str segment(segmentSize), all_segments;
+	Str segment(segmentSize, '\0'), all_segments;
 
-    ifstream file(filename, std::ifstream::binary);
-    if (!file)
-        SLS_ERR("Cannot open file: " + filename);
+    ifstream fin(file, std::ifstream::binary);
+    if (!fin)
+        SLS_ERR("Cannot open file: " + file);
 
     // Determine the size of the file
-    file.seekg(0, file.end);
-    Long fileSize = file.tellg();
-    file.seekg(0, file.beg);
+    fin.seekg(0, fin.end);
+    Long fileSize = fin.tellg();
+    fin.seekg(0, fin.beg);
+	Long step = fileSize / numSegments;
 
 	if (fileSize > numSegments * segmentSize)
-		return sha1sum_f(file);
+		return sha1sum_f_exec(file);
 
-    // Read and print segments from the file
+    // read segments from the file
     for (Long i = 0; i < numSegments; ++i) {
-        file.seekg(i * step);
-        file.read(segment.data(), segmentSize);
-		all_segments += segment.
+        fin.seekg(i * step);
+        fin.read(&segment[0], segmentSize);
+		all_segments += segment;
     }
 	return sha1sum(all_segments);
 }
@@ -98,14 +98,14 @@ int main(int argc, char *argv[])
 				if (sizes[j] != sizes[i])
 					continue;
 				if (sha1s[i].empty()) {
-					sha1s[i] = sha1sum_f(fnames[i]);
+					sha1s[i] = sha1sum_f_exec(fnames[i]);
 					++sha1count;
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
 						<< std::setw(43) << sha1s[i]
 						<< std::setw(3) << fnames[i] << endl;
 				}
 				if (sha1s[j].empty()) {
-					sha1s[j] = sha1sum_f(fnames[j]);
+					sha1s[j] = sha1sum_f_exec(fnames[j]);
 					++sha1count;
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
 						<< std::setw(43) << sha1s[j]
