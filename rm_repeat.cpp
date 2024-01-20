@@ -70,13 +70,13 @@ int main(int argc, char *argv[])
 				if (sha1_samples[i].empty()) {
 					sha1_samples[i] = sha1sum_f_sample(fnames[i]);
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-						<< std::setw(43) << "sampled " << sha1_samples[i]
+						<< " (sampled) " << std::setw(43) << sha1_samples[i]
 						<< std::setw(3) << fnames[i] << endl;
 				}
 				if (sha1_samples[j].empty()) {
 					sha1_samples[j] = sha1sum_f_sample(fnames[j]);
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-						<< std::setw(43) << "sampled " << sha1_samples[j]
+						 << " (sampled) " << std::setw(43) << sha1_samples[j]
 						<< std::setw(3) << fnames[j] << endl;
 				}
 				if (sha1_samples[j] != sha1_samples[i])
