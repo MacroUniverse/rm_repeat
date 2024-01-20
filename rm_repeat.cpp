@@ -66,29 +66,35 @@ int main(int argc, char *argv[])
 			for (Long j = i+1; j < N; ++j) {
 				if (sizes[j] != sizes[i])
 					continue;
+				// compare sha1 for file sampling
 				if (sha1_samples[i].empty()) {
 					sha1_samples[i] = sha1sum_f_sample(fnames[i]);
-					cout << "sha1_sample: " << fnames[i] << "  " << sha1_samples[i] << endl;
+					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+						<< std::setw(43) << "sampled " << sha1_samples[i]
+						<< std::setw(3) << fnames[i] << endl;
 				}
 				if (sha1_samples[j].empty()) {
 					sha1_samples[j] = sha1sum_f_sample(fnames[j]);
-					cout << "sha1_sample: " << fnames[j] << "  " << sha1_samples[j] << endl;
+					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+						<< std::setw(43) << "sampled " << sha1_samples[j]
+						<< std::setw(3) << fnames[j] << endl;
 				}
-				if (sha1_samples[i] == sha1_samples[j]) {
-					if (sha1s[i].empty()) {
-						sha1s[i] = sha1sum_f(fnames[i]);
-						++sha1count;
-						cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-							<< std::setw(43) << sha1s[i]
-							<< std::setw(3) << fnames[i] << endl;
-					}
-					if (sha1s[j].empty()) {
-						sha1s[j] = sha1sum_f_sample(fnames[j]);
-						++sha1count;
-						cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-							<< std::setw(43) << sha1s[j]
-							<< std::setw(3) << fnames[j] << endl;
-					}
+				if (sha1_samples[j] != sha1_samples[i])
+					continue;
+				// has to take hash now
+				if (sha1s[i].empty()) {
+					sha1s[i] = sha1sum_f(fnames[i]);
+					++sha1count;
+					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+						<< std::setw(43) << sha1s[i]
+						<< std::setw(3) << fnames[i] << endl;
+				}
+				if (sha1s[j].empty()) {
+					sha1s[j] = sha1sum_f_sample(fnames[j]);
+					++sha1count;
+					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+						<< std::setw(43) << sha1s[j]
+						<< std::setw(3) << fnames[j] << endl;
 				}
 			}
 		}
@@ -154,7 +160,7 @@ int main(int argc, char *argv[])
 				Str mod_time_i, mod_time_j;
 				last_modified(mod_time_i, fnames[i]);
 				last_modified(mod_time_j, fnames[j]);
-                Str tmp = del_newer ? "(newer)" : "(older)";
+				Str tmp = del_newer ? "(newer)" : "(older)";
 				if (del_newer == (mod_time_i > mod_time_j)) { 
 					cout << "auto delete " + tmp + ": " << fnames[i] << endl;
 					dest = path_recyc + fnames[i];
@@ -165,7 +171,7 @@ int main(int argc, char *argv[])
 					break;
 				}
 				else {
-                    cout << "auto delete " + tmp + ": " << fnames[j] << endl;
+					cout << "auto delete " + tmp + ": " << fnames[j] << endl;
 					dest = path_recyc + fnames[j];
 					ensure_dir(dest);
 					if (file_exist(fnames[j]))
@@ -238,7 +244,7 @@ int main(int argc, char *argv[])
 			}
 			else if (select == "dn") {
 				del_newer = true;
-                cout << "prefer newer files for auto delete" << endl;
+				cout << "prefer newer files for auto delete" << endl;
 				--j;
 			}
 			else if (select.substr(0,3) == "ad=") {
