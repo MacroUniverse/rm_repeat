@@ -8,44 +8,13 @@
 // check repeated files and ask if delete
 using namespace slisc;
 
-// TODO: use this function first before the full SHA1 hashing!!!! for performance
-// takes 100 bytes from 10 parts of the file then calculate SHA1
-// if the file size is less than 1000 bytes, calculate SHA1 for the whole file
-inline Str sha1_file_part(Str_I file)
-{
-    const Long numSegments = 10;
-    const Long segmentSize = 100;
-	Str segment(segmentSize, '\0'), all_segments;
-
-    ifstream fin(file, std::ifstream::binary);
-    if (!fin)
-        SLS_ERR("Cannot open file: " + file);
-
-    // Determine the size of the file
-    fin.seekg(0, fin.end);
-    Long fileSize = fin.tellg();
-    fin.seekg(0, fin.beg);
-	Long step = fileSize / numSegments;
-
-	if (fileSize > numSegments * segmentSize)
-		return sha1sum_f_exec(file);
-
-    // read segments from the file
-    for (Long i = 0; i < numSegments; ++i) {
-        fin.seekg(i * step);
-        fin.read(&segment[0], segmentSize);
-		all_segments += segment;
-    }
-	return sha1sum(all_segments);
-}
-
 int main(int argc, char *argv[])
 {
 	Long N;
 	Bool del_newer = false;
 	if (argc < 2)
 		SLS_ERR("usage: rm_repeat <path1> <path2> ...");
-	vecStr fnames, sha1s; // file names and sha1 sums
+	vecStr fnames, sha1_samples, sha1s; // file names and sha1 sums
 	VecLong sizes; // file size in bytes
 	vecBool exist; // does file exist? (might be deleted)
 	Bool auto_skip = false; // auto skip (intended to be used with auto delete)
@@ -72,7 +41,7 @@ int main(int argc, char *argv[])
 			file_list_r(fnames, argv[i], true);
 
 		N = fnames.size();
-		sizes.resize(N); sha1s.resize(N); exist.resize(N);
+		sizes.resize(N); sha1s.resize(N); sha1_samples.resize(N); exist.resize(N);
 		copy(exist, true);
 
 		// file size
@@ -88,7 +57,7 @@ int main(int argc, char *argv[])
 				<< std::setw(3) << std::left << fnames[i] << endl;
 		}
 
-		// checksum only for non-empty files with the the same sizes
+		// checksum only for non-empty files with the same sizes
 		Long sha1count = 0;
 		cout << "\n\nchecksum...\n==============================================================" << endl;
 		for (Long i = 0; i < N; ++i) {
@@ -97,19 +66,29 @@ int main(int argc, char *argv[])
 			for (Long j = i+1; j < N; ++j) {
 				if (sizes[j] != sizes[i])
 					continue;
-				if (sha1s[i].empty()) {
-					sha1s[i] = sha1sum_f_exec(fnames[i]);
-					++sha1count;
-					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-						<< std::setw(43) << sha1s[i]
-						<< std::setw(3) << fnames[i] << endl;
+				if (sha1_samples[i].empty()) {
+					sha1_samples[i] = sha1sum_f_sample(fnames[i]);
+					cout << "sha1_sample: " << fnames[i] << "  " << sha1_samples[i] << endl;
 				}
-				if (sha1s[j].empty()) {
-					sha1s[j] = sha1sum_f_exec(fnames[j]);
-					++sha1count;
-					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
-						<< std::setw(43) << sha1s[j]
-						<< std::setw(3) << fnames[j] << endl;
+				if (sha1_samples[j].empty()) {
+					sha1_samples[j] = sha1sum_f_sample(fnames[j]);
+					cout << "sha1_sample: " << fnames[j] << "  " << sha1_samples[j] << endl;
+				}
+				if (sha1_samples[i] == sha1_samples[j]) {
+					if (sha1s[i].empty()) {
+						sha1s[i] = sha1sum_f(fnames[i]);
+						++sha1count;
+						cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+							<< std::setw(43) << sha1s[i]
+							<< std::setw(3) << fnames[i] << endl;
+					}
+					if (sha1s[j].empty()) {
+						sha1s[j] = sha1sum_f_sample(fnames[j]);
+						++sha1count;
+						cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
+							<< std::setw(43) << sha1s[j]
+							<< std::setw(3) << fnames[j] << endl;
+					}
 				}
 			}
 		}

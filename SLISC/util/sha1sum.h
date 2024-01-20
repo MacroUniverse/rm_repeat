@@ -232,4 +232,35 @@ namespace slisc {
 		return stdout.substr(0, 40);
 	}
 #endif
+
+	// takes 100 bytes from 10 parts of the file then calculate SHA1
+	// if the file size is less than 1000 bytes, calculate SHA1 for the whole file
+	inline Str sha1sum_f_sample(Str_I file)
+	{
+		const Long numSegments = 10;
+		const Long segmentSize = 100;
+		static thread_local Str segment(segmentSize, '\0'), all_segments;
+
+		ifstream fin(file, std::ifstream::binary);
+		if (!fin)
+			SLS_ERR("Cannot open file: " + file);
+
+		// Determine the size of the file
+		fin.seekg(0, fin.end);
+		Long fileSize = fin.tellg();
+		fin.seekg(0, fin.beg);
+		Long step = fileSize / numSegments;
+
+		if (fileSize < numSegments * segmentSize)
+			return sha1sum_f(file);
+
+		// read segments from the file
+		for (Long i = 0; i < numSegments; ++i) {
+			fin.seekg(i * step);
+			fin.read(&segment[0], segmentSize);
+			all_segments += segment;
+		}
+		return sha1sum(all_segments);
+	}
+
 } // namespace slisc
