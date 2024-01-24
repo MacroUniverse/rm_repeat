@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 					continue;
 				// has to take hash now
 				if (sha1s[i].empty()) {
-					sha1s[i] = sha1sum_f(fnames[i]);
+					sha1s[i] = sha1sum_f_exec(fnames[i]);
 					++sha1count;
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
 						<< std::setw(43) << sha1s[i]
