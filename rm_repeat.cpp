@@ -5,6 +5,10 @@
 #include "SLISC/str/disp.h"
 #include "SLISC/file/matb.h"
 
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 9
+#define VERSION_PATCH 0
+
 // check repeated files and ask if delete
 using namespace slisc;
 
@@ -14,6 +18,10 @@ int main(int argc, char *argv[])
 	Bool del_newer = false;
 	if (argc < 2)
 		SLS_ERR("usage: rm_repeat <path1> <path2> ...");
+	if (argc == 2 && argv[1] == Str("--version")) {
+		cout << VERSION_MAJOR << '.' << VERSION_MINOR << '.' << VERSION_PATCH << endl;
+		return 0;
+	}
 	vecStr fnames, sha1_samples, sha1s; // file names and sha1 sums
 	VecLong sizes; // file size in bytes
 	vecBool exist; // does file exist? (might be deleted)
