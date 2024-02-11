@@ -7,7 +7,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 9
-#define VERSION_PATCH 0
+#define VERSION_PATCH 1
 
 // check repeated files and ask if delete
 using namespace slisc;
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 						<< std::setw(3) << fnames[i] << endl;
 				}
 				if (sha1s[j].empty()) {
-					sha1s[j] = sha1sum_f_sample(fnames[j]);
+					sha1s[j] = sha1sum_f_exec(fnames[j]);
 					++sha1count;
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
 						<< std::setw(43) << sha1s[j]
