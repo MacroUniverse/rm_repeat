@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
 					continue;
 				// has to take hash now
 				if (sha1s[i].empty()) {
+					// sha1sum_f() will take lots of memory for large files!
 					sha1s[i] = sha1sum_f_exec(fnames[i]);
 					++sha1count;
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
@@ -102,6 +103,7 @@ int main(int argc, char *argv[])
 						<< std::setw(3) << fnames[i] << endl;
 				}
 				if (sha1s[j].empty()) {
+					// sha1sum_f() will take lots of memory for large files!
 					sha1s[j] = sha1sum_f_exec(fnames[j]);
 					++sha1count;
 					cout << std::setw(3*log10(N)+9) << std::left << "(" + num2str(i+1) + ", " + num2str(j+1) + ")/" + num2str(N)
