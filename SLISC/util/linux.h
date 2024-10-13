@@ -1,47 +1,45 @@
 // linux utilities
 #pragma once
+#include <cstdio>
+#include "../global.h"
 #include "../str/str.h"
 
 #if defined(SLS_USE_LINUX) || defined(SLS_USE_MACOS)
-#include <cstdio>
 #include <memory>
 #include <stdexcept>
 #include <array>
 #include <unistd.h>
+#endif
 
 namespace slisc {
 
 // execute a command in default shell and get the output to stdout
 // return exit code
 // use `int system(cmd)` if you don't need stdout
-inline int exec_str(Str_O stdout, Str_I cmd)
+inline int exec_str(Str_O my_stdout, Str_I cmd)
 {
-	SLS_ASSERT(&stdout != &cmd);
-	if (cmd.empty()) {
+	if (cmd.empty())
 		SLS_ERR("exec_str(): cmd is empty()");
-	}
 
-	static Str cmd1;
-	cmd1 = cmd;
-	trim(cmd1, " \n");
-	if (cmd1.back() != ';') cmd1 += " ; ";
-	cmd1 += "printf \\|$?";
-
-	std::array<char, 128> buffer{};
-	std::unique_ptr<FILE, decltype(&pclose)>
-		pipe(popen(cmd1.c_str(), "r"), pclose);
+	char buffer[256];
+	FILE *pipe = popen(cmd.c_str(), "r");
 	if (!pipe)
 		throw runtime_error("popen() failed!");
-	stdout.clear();
-	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-		stdout += buffer.data();
-	size_t ind = stdout.rfind('|');
-	if (ind == npos)
-		throw runtime_error("exec_str(): cmd1 = \n" + cmd1);
-	int ret = str2Int(stdout.substr(ind + 1));
-	stdout.resize(ind);
+
+	my_stdout.clear();
+	while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
+		my_stdout += buffer;
+
+	int ret = pclose(pipe);
+    if (ret == -1) {
+        perror("pclose() failed");
+        SLS_ERR(SLS_WHERE);
+    }
 	return ret;
 }
+
+
+#if defined(SLS_USE_LINUX) || defined(SLS_USE_MACOS)
 
 // get pid of all child processes
 // reslut should be sorted (not sure)
@@ -65,7 +63,7 @@ inline void child_pid(vector<Int> &child_pids, Int_I pid)
 // mem usage by this program in KiB
 // works on computer cluster
 // run time about 5e-5s
-#ifndef SLS_USE_MACOS
+	#ifndef SLS_USE_MACOS
 // get the current hostname (machine name)
 inline Str host_name()
 {
@@ -93,12 +91,13 @@ inline Long ram_usage() {
 	fclose(file);
 	return i;
 }
-#else
+	#else
 inline Long ram_usage() {
 	SLS_WARN("not implemented for macOS");
 	return -1;
 }
-#endif
+	#endif
+
+#endif // defined(SLS_USE_LINUX) || defined(SLS_USE_MACOS)
 
 } // namespace slisc
-#endif
