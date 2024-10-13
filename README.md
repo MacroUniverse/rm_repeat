@@ -1,6 +1,8 @@
 ## rm_repeat
 remove repeated files in folders recursively
 
+supports Linux, MacOS, MSYS2, MinGW-64
+
 alternatives:
 * `fdupes`
 * `fslint`

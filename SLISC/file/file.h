@@ -253,10 +253,10 @@ inline int file_rm(Str_I wildcard_name) {
 }
 
 // list all files in current directory (not sub-folders)
-// path must end with '/'
 // result is sorted
 inline void file_list(vecStr_O fnames, Str_I path, Bool_I append)
 {
+	SLS_ASSERT(path.back() == '/');
 	if (!append) fnames.clear();
 #if defined(SLS_USE_FILESYSTEM)
 	for (const auto& entry : filesystem::directory_iterator(path))
@@ -420,6 +420,7 @@ inline void file_list_r(vecStr_O fnames, Str_I path, Bool_I append = false)
 	}
 	sort(fnames);
 #elif defined(SLS_USE_WINDOWS)
+	SLS_ASSERT(path.back() == '/');
 	if (!append)
 		fnames.clear();
 	file_list_full(fnames, path, true);

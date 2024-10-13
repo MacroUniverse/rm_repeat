@@ -225,7 +225,7 @@ namespace slisc {
 #if defined(SLS_USE_LINUX) || defined(SLS_USE_MACOS) || defined(SLS_USE_MINGW)
 	inline Str sha1sum_f_exec(Str_I fname) {
 		Str my_stdout;
-		if (exec_str(my_stdout, "sha1sum \"" + fname + "\";"))
+		if (exec_str(my_stdout, "sha1sum \"" + fname + "\""))
 			SLS_ERR("exec_str returned none-zero!");
 		if (my_stdout.size() <= 41)
 			SLS_ERR("exec_str() illegal output: " + my_stdout);

@@ -7,7 +7,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 9
-#define VERSION_PATCH 1
+#define VERSION_PATCH 2
 
 // check repeated files and ask if delete
 using namespace slisc;
@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 	Str path_recyc = "./rm_repeat_recycle/"; // recycle folder
 	Bool resume = file_exist(path_recyc + "data.matb"); // if rm_repeat_recycle/data.matb exist, then load data from it.
 	Bool ignore_size0 = true; // ignore files with 0 size
+	Str path;
 	
 	if (resume) {
 		cout << "resuming from previous data..." << endl;
@@ -46,7 +47,10 @@ int main(int argc, char *argv[])
 			ignore_size0 = false; ++istart;
 		}
 		for (Long i = istart; i < argc; ++i)
-			file_list_r(fnames, argv[i], true);
+			path = argv[i];
+			if (path.back() != '/')
+				path += '/';
+			file_list_r(fnames, path, true);
 
 		N = fnames.size();
 		sizes.resize(N); sha1s.resize(N); sha1_samples.resize(N); exist.resize(N);

@@ -1,1 +1,7 @@
 *~
+/Testing/
+Makefile
+.cmake
+/CMake*
+/*.ninja
+/.ninja*
